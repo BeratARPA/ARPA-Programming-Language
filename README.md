@@ -91,15 +91,15 @@ After cloning the project, follow these steps to run **ARPA Studio**:
 **ARPA** language is written using **Turkish** commands and operators. Here is a simple example:
 
 ```arpa
-number x = 10;
-number y = 20;
-if (x < y)
+sayı x = 10;
+sayı y = 20;
+eğer (x < y)
 {
-    print("x is smaller than y.");
+    yazdır("x, y'den küçüktür.");
 }
-else
+değilse
 {
-    print("x is greater than or equal to y.");
+    yazdır("x, y'den büyük veya eşittir.");
 }
 ```
 
