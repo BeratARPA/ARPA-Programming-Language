@@ -1,3 +1,4 @@
+# Türkçe
 
 # ARPA Programlama Dili
 
@@ -58,3 +59,66 @@ Projeye katkıda bulunmak isterseniz, lütfen pull request gönderin veya bir is
 
 ## Lisans
 Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için `LICENSE` dosyasına bakabilirsiniz.
+
+
+# English
+
+# ARPA Programming Language
+
+**ARPA** is a programming language that uses the same **C# syntax** but can be written entirely in **Turkish**. It has been developed using **C# and ANTLR4** technologies and can be run using the **ARPA Studio** IDE.
+
+## Features
+- Support for **Turkish** syntax
+- Same structure as **C# syntax**
+- Supports basic programming concepts such as variable declarations, assignments, if/else statements, loops, and functions
+- **ARPA Studio IDE** developed with **WPF Core 8.0**
+- Code writing and editing with the **AvalonEdit** component
+- Instant execution of ARPA code with immediate result display
+- Compilation of ARPA code using **ANTLR4**
+
+## Installation
+After cloning the project, follow these steps to run **ARPA Studio**:
+
+1. Make sure **.NET Core 8.0** is installed.
+2. Clone the project:
+    ```bash
+    git clone https://github.com/BeratARPA/ARPA-Programming-Language.git
+    ```
+3. Open the project with any .NET Core-supported IDE and compile it.
+4. Launch **ARPA Studio** to run your code written in the **ARPA** language.
+
+## Usage
+**ARPA** language is written using **Turkish** commands and operators. Here is a simple example:
+
+```arpa
+number x = 10;
+number y = 20;
+if (x < y)
+{
+    print("x is smaller than y.");
+}
+else
+{
+    print("x is greater than or equal to y.");
+}
+```
+
+### Supported Data Types
+- `number`: For integer values
+- `decimal`: For decimal values
+- `string`: For string values
+- `boolean`: For logical values (true/false)
+
+### Supported Operators
+- Arithmetic Operators: `+`, `-`, `*`, `/`, `%`
+- Comparison Operators: `==`, `!=`, `>`, `<`, `>=`, `<=`
+- Logical Operators: `and`, `or`
+
+## ARPA Studio
+**ARPA Studio** is an IDE where you can edit and run code written in the **ARPA** language. It uses the **AvalonEdit** component as the code editor. You can instantly execute your **ARPA** code and see the results in the output window.
+
+## Contributing
+If you would like to contribute to the project, please submit a pull request or open an issue. Your contributions are valuable to us!
+
+## License
+This project is licensed under the MIT License. For details, see the `LICENSE` file.
