@@ -96,6 +96,18 @@ public partial class ARPABaseListener : IARPAListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitFunctionDeclaration([NotNull] ARPAParser.FunctionDeclarationContext context) { }
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="ARPAParser.paramList"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterParamList([NotNull] ARPAParser.ParamListContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="ARPAParser.paramList"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitParamList([NotNull] ARPAParser.ParamListContext context) { }
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="ARPAParser.assignment"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
@@ -156,6 +168,18 @@ public partial class ARPABaseListener : IARPAListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitBlock([NotNull] ARPAParser.BlockContext context) { }
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="ARPAParser.returnStatement"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterReturnStatement([NotNull] ARPAParser.ReturnStatementContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="ARPAParser.returnStatement"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitReturnStatement([NotNull] ARPAParser.ReturnStatementContext context) { }
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="ARPAParser.expression"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
@@ -167,6 +191,30 @@ public partial class ARPABaseListener : IARPAListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitExpression([NotNull] ARPAParser.ExpressionContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="ARPAParser.functionCall"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterFunctionCall([NotNull] ARPAParser.FunctionCallContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="ARPAParser.functionCall"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitFunctionCall([NotNull] ARPAParser.FunctionCallContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="ARPAParser.argList"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterArgList([NotNull] ARPAParser.ArgListContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="ARPAParser.argList"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitArgList([NotNull] ARPAParser.ArgListContext context) { }
 
 	/// <inheritdoc/>
 	/// <remarks>The default implementation does nothing.</remarks>

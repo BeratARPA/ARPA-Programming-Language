@@ -62,6 +62,12 @@ public interface IARPAVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitFunctionDeclaration([NotNull] ARPAParser.FunctionDeclarationContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="ARPAParser.paramList"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitParamList([NotNull] ARPAParser.ParamListContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="ARPAParser.assignment"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -92,9 +98,27 @@ public interface IARPAVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitBlock([NotNull] ARPAParser.BlockContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="ARPAParser.returnStatement"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitReturnStatement([NotNull] ARPAParser.ReturnStatementContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="ARPAParser.expression"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitExpression([NotNull] ARPAParser.ExpressionContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="ARPAParser.functionCall"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitFunctionCall([NotNull] ARPAParser.FunctionCallContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="ARPAParser.argList"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitArgList([NotNull] ARPAParser.ArgListContext context);
 }

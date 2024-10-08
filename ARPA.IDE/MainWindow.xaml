@@ -8,16 +8,31 @@
         Title="ARPA Studio" Height="600" Width="800" MinHeight="600" MinWidth="800" WindowStartupLocation="CenterScreen" ResizeMode="CanResize">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <avalonEdit:TextEditor Grid.Row="0" Name="TextEditor" ShowLineNumbers="True" SyntaxHighlighting="C#" FontFamily="Consolas" FontSize="15"/>
-        
-        <Button Name="ButtonRun" Content="Çalıştır" Click="ButtonRun_Click" Grid.Row="1" Margin="5" />
+        <!-- Menü Çubuğu -->
+        <Menu Grid.Row="0">
+            <MenuItem Header="Dosya">
+                <MenuItem Header="Yeni" Click="MenuItemNew_Click"/>
+                <MenuItem Header="Aç" Click="MenuItemOpen_Click"/>
+                <MenuItem Header="Kaydet" Click="MenuItemSave_Click"/>
+            </MenuItem>
+            <MenuItem Header="Yardım">
+                <MenuItem Header="Dökümantasyon" Click="MenuItemDocumentation_Click"/>
+            </MenuItem>
+        </Menu>
 
-        <TextBox Name="TextBoxOutput" IsReadOnly="True" VerticalScrollBarVisibility="Auto" 
-                 FontFamily="Courier New" FontSize="14" Grid.Row="2" />
+        <!-- Metin Düzenleyici -->
+        <avalonEdit:TextEditor Grid.Row="1" Name="TextEditor" ShowLineNumbers="True" SyntaxHighlighting="C#" FontFamily="Consolas" FontSize="15"/>
+
+        <!-- Çalıştırma Butonu -->
+        <Button Name="ButtonRun" Content="Çalıştır" Click="ButtonRun_Click" Grid.Row="2" Margin="5" />
+
+        <!-- Çıktı Penceresi -->
+        <TextBox Name="TextBoxOutput" Height="150" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" FontFamily="Consolas" FontSize="15" Grid.Row="3" />
     </Grid>
 </Window>

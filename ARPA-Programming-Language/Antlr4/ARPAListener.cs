@@ -81,6 +81,16 @@ public interface IARPAListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitFunctionDeclaration([NotNull] ARPAParser.FunctionDeclarationContext context);
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="ARPAParser.paramList"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterParamList([NotNull] ARPAParser.ParamListContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="ARPAParser.paramList"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitParamList([NotNull] ARPAParser.ParamListContext context);
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="ARPAParser.assignment"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -131,6 +141,16 @@ public interface IARPAListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitBlock([NotNull] ARPAParser.BlockContext context);
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="ARPAParser.returnStatement"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterReturnStatement([NotNull] ARPAParser.ReturnStatementContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="ARPAParser.returnStatement"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitReturnStatement([NotNull] ARPAParser.ReturnStatementContext context);
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="ARPAParser.expression"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -140,4 +160,24 @@ public interface IARPAListener : IParseTreeListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	void ExitExpression([NotNull] ARPAParser.ExpressionContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="ARPAParser.functionCall"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterFunctionCall([NotNull] ARPAParser.FunctionCallContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="ARPAParser.functionCall"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitFunctionCall([NotNull] ARPAParser.FunctionCallContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="ARPAParser.argList"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterArgList([NotNull] ARPAParser.ArgListContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="ARPAParser.argList"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitArgList([NotNull] ARPAParser.ArgListContext context);
 }

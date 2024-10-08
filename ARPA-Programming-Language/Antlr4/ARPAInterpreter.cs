@@ -1,14 +1,18 @@
 ﻿using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
+using ARPA_Programming_Language.Exceptions;
+using System.Globalization;
 using System.Text;
 
 namespace ARPA_Programming_Language.Antlr4
 {
     public class ARPAInterpreter : IARPAVisitor<object>
     {
+        private Dictionary<string, Func<object[], object>> _functions = new Dictionary<string, Func<object[], object>>();
         private readonly Dictionary<string, object> _variables = new Dictionary<string, object>();
-        public StringBuilder Output { get; private set; } = new StringBuilder();
+
+        public StringBuilder _output { get; private set; } = new StringBuilder();
 
         public object Visit(IParseTree tree)
         {
@@ -44,11 +48,19 @@ namespace ARPA_Programming_Language.Antlr4
 
         public object VisitBlock([NotNull] ARPAParser.BlockContext context)
         {
+            object result = null;
             foreach (var statement in context.statement())
             {
-                Visit(statement); // Her bir ifadeyi değerlendir
+                try
+                {
+                    result = Visit(statement);
+                }
+                catch (ReturnException returnEx)
+                {
+                    return returnEx.ReturnValue; // Fonksiyon içinde return edildiğinde değeri geri döndür
+                }
             }
-            return null;
+            return result;
         }
 
         public object VisitChildren(IRuleNode node)
@@ -72,7 +84,17 @@ namespace ARPA_Programming_Language.Antlr4
 
         public object VisitErrorNode(IErrorNode node)
         {
-            throw new Exception($"Hata: {node.GetText()}");
+            // node.Payload nesnesini IToken olarak cast ediyoruz.
+            var token = node.Payload as IToken;
+            if (token != null)
+            {
+                var line = token.Line;
+                var column = token.Column;
+                throw new Exception($"Hata (Satır: {line}, Sütun: {column}): {node.GetText()}");
+            }
+
+            // Eğer cast başarısız olursa uygun bir hata fırlatıyoruz.
+            throw new Exception($"Hata: {node.GetText()} - Geçersiz token tipi.");
         }
 
         public object VisitExpression([NotNull] ARPAParser.ExpressionContext context)
@@ -80,7 +102,15 @@ namespace ARPA_Programming_Language.Antlr4
             // Sayı ifadelerini değerlendir
             if (context.NUMBER() != null)
             {
-                return double.Parse(context.NUMBER().GetText()); // Sayıyı değerlendir
+                var numberText = context.NUMBER().GetText();
+                if (double.TryParse(numberText, NumberStyles.Any, CultureInfo.InvariantCulture, out double result))
+                {
+                    return result; // Başarılıysa sonucu döndür
+                }
+                else
+                {
+                    throw new Exception($"Invalid number format: {numberText}");
+                }
             }
 
             // String ifadelerini değerlendir
@@ -100,6 +130,24 @@ namespace ARPA_Programming_Language.Antlr4
                 return _variables[varName]; // Değişkeni değerlendir
             }
 
+            // Fonksiyon çağrısını değerlendir
+            if (context.functionCall() != null)
+            {
+                try
+                {
+                    return Visit(context.functionCall()); // Fonksiyon çağrısını değerlendir
+                }
+                catch (ReturnException returnEx)
+                {
+                    return returnEx.ReturnValue; // Dönüş değerini al
+                }
+            }
+
+            if (context.expression().Length == 1)
+            {
+                return Visit(context.expression(0)); // Tek bir ifade varsa, onu değerlendir
+            }
+
             // Koşullu ifadeleri değerlendir
             if (context.ChildCount == 3 && IsComparisonOperator(context.GetChild(1).GetText()))
             {
@@ -115,9 +163,9 @@ namespace ARPA_Programming_Language.Antlr4
                 string op = context.GetChild(1).GetText(); // İşlem sembolü
 
                 // Karşılaştırma işlemleri
-                if (left is double leftValue && right is double rightValue)
-                {
-                    return op switch
+                // Karşılaştırma işlemleri
+                bool result = left is double leftValue && right is double rightValue
+                    ? op switch
                     {
                         "==" => leftValue == rightValue,
                         "!=" => leftValue != rightValue,
@@ -126,12 +174,18 @@ namespace ARPA_Programming_Language.Antlr4
                         ">=" => leftValue >= rightValue,
                         "<=" => leftValue <= rightValue,
                         _ => throw new InvalidOperationException($"Desteklenmeyen işlem: {op}")
-                    };
-                }
-                else
-                {
-                    throw new InvalidOperationException("Karşılaştırma işlemleri sadece sayılar ile yapılabilir.");
-                }
+                    }
+                    : left is string leftStr && right is string rightStr
+                    ? op switch
+                    {
+                        "==" => leftStr.Equals(rightStr),
+                        "!=" => !leftStr.Equals(rightStr),
+                        _ => throw new InvalidOperationException($"String türü için desteklenmeyen işlem: {op}")
+                    }
+                    : throw new InvalidOperationException("Karşılaştırma işlemleri sadece sayılar veya string türleri ile yapılabilir.");
+
+                // Koşulun sonucunu döndür
+                return result; // Burada sonucu döndürdük
             }
 
             // Aritmetik işlemleri değerlendir
@@ -179,6 +233,11 @@ namespace ARPA_Programming_Language.Antlr4
             {
                 var left = Visit(context.expression(1)); // İlk ifadeyi değerlendir
                 var right = Visit(context.expression(2)); // İkinci ifadeyi değerlendir
+
+                if (left == null || right == null)
+                {
+                    throw new InvalidOperationException("Yazdırma işlemi için değerler tanımlı olmalıdır.");
+                }
 
                 if (left is string str && right is double num)
                 {
@@ -231,33 +290,38 @@ namespace ARPA_Programming_Language.Antlr4
             return Visit(context.expression()); // İfadeyi değerlendir
         }
 
-        public object VisitFunctionDeclaration([NotNull] ARPAParser.FunctionDeclarationContext context)
-        {
-            throw new NotImplementedException("Fonksiyon tanımı henüz desteklenmiyor.");
-        }
-
         public object VisitIfStatement([NotNull] ARPAParser.IfStatementContext context)
         {
-            var condition = (bool)Visit(context.expression(0)); // İlk koşulu değerlendir
+            // İlk koşulu değerlendir
+            var condition = (bool)Visit(context.expression(0));
+
             if (condition)
             {
-                Visit(context.block(0)); // Eğer koşulu doğruysa ilk bloğu değerlendir
+                // Eğer koşulu doğruysa ilk bloğu değerlendir
+                Visit(context.block(0));
             }
-            else if (context.DEĞİLSEEĞER() != null) // Eğer "değilse eğer" varsa
+            else
             {
-                var elseIfCondition = (bool)Visit(context.expression(1)); // Alternatif koşulu değerlendir
-                if (elseIfCondition)
+                // "değilseeğer" ve "değilse" durumlarını kontrol et
+                bool evaluated = false; // Bir blok değerlendirildi mi?
+
+                // "değilseeğer" bloklarını işle
+                for (int i = 1; i < context.expression().Length; i++)
                 {
-                    Visit(context.block(1)); // Eğer alternatif koşul doğruysa, ilgili bloğu değerlendir
+                    var elseIfCondition = (bool)Visit(context.expression(i));
+                    if (elseIfCondition)
+                    {
+                        Visit(context.block(i));
+                        evaluated = true; // Bir blok değerlendirildi, daha fazla kontrol yapma
+                        break;
+                    }
                 }
-                else if (context.DEĞİLSE() != null) // Eğer "değilse" varsa
+
+                // Hiçbir "değilseeğer" koşulu sağlanmazsa ve "değilse" bloğu varsa
+                if (!evaluated && context.DEĞİLSE() != null)
                 {
-                    Visit(context.block(2)); // Hiçbiri sağlanmazsa son bloğu değerlendir
+                    Visit(context.block(context.block().Length - 1));
                 }
-            }
-            else if (context.DEĞİLSE() != null) // Eğer "değilse" varsa
-            {
-                Visit(context.block(1)); // Son bloğu değerlendir
             }
             return null;
         }
@@ -265,16 +329,32 @@ namespace ARPA_Programming_Language.Antlr4
         public object VisitPrintStatement([NotNull] ARPAParser.PrintStatementContext context)
         {
             var value = Visit(context.expression());
-            Output.AppendLine(value.ToString());
+            _output.AppendLine(value.ToString());
             return null;
         }
 
-        public object VisitProgram([NotNull] ARPAParser.ProgramContext context)
+        public object VisitProgram(ARPAParser.ProgramContext context)
         {
+            // 1. Aşama: Fonksiyon Tanımlamalarını Topla
             foreach (var statement in context.statement())
             {
-                Visit(statement); // Programdaki her bir ifadeyi değerlendir
+                if (statement.declaration() != null && statement.declaration().functionDeclaration() != null)
+                {
+                    Visit(statement.declaration().functionDeclaration());
+                }
             }
+
+            // 2. Aşama: Diğer İfadeleri Çalıştır
+            foreach (var statement in context.statement())
+            {
+                // Fonksiyon tanımlamaları zaten işlendiği için onları atlıyoruz
+                if (statement.declaration() != null && statement.declaration().functionDeclaration() != null)
+                {
+                    continue;
+                }
+                Visit(statement);
+            }
+
             return null;
         }
 
@@ -303,6 +383,91 @@ namespace ARPA_Programming_Language.Antlr4
                 _variables[varName] = null; // Değeri tanımla ama boş bırak
             }
             return null;
+        }
+
+        public object VisitParamList([NotNull] ARPAParser.ParamListContext context)
+        {
+            var paramList = new List<string>();
+
+            // Parametrelerin hepsini gez
+            foreach (var param in context.ID())
+            {
+                paramList.Add(param.GetText());
+            }
+
+            return paramList;
+        }
+
+        public object VisitFunctionCall([NotNull] ARPAParser.FunctionCallContext context)
+        {
+            string functionName = context.ID().GetText(); // Fonksiyon ismini al
+            var args = Visit(context.argList()) as List<object>; // Argüman listesini değerlendir
+
+            // Eğer argümanlar null ise boş bir dizi döndür
+            if (args == null)
+            {
+                args = new List<object>();
+            }
+
+            // Fonksiyonun var olup olmadığını kontrol et
+            if (_functions.TryGetValue(functionName, out var function))
+            {
+                try
+                {
+                    // Fonksiyonu argümanlarla çağır
+                    return function(args.ToArray());
+                }
+                catch (ReturnException returnEx)
+                {
+                    // ReturnException yakalandığında dönen değeri geri döndür
+                    return returnEx.ReturnValue;
+                }
+            }
+
+            throw new Exception($"Fonksiyon '{functionName}' bulunamadı."); // Hata fırlat
+        }
+
+        public object VisitArgList([NotNull] ARPAParser.ArgListContext context)
+        {
+            var argList = new List<object>();
+            foreach (var expr in context.expression())
+            {
+                var argValue = Visit(expr);
+                argList.Add(argValue);
+            }
+            return argList;
+        }
+
+        public object VisitFunctionDeclaration([NotNull] ARPAParser.FunctionDeclarationContext context)
+        {
+            string functionName = context.ID().GetText();
+            var paramList = Visit(context.paramList()) as List<string> ?? new List<string>();
+            var block = context.block();
+
+            _functions[functionName] = (args) =>
+            {
+                for (int i = 0; i < paramList.Count; i++)
+                {
+                    _variables[paramList[i]] = args[i];
+                }
+
+                try
+                {
+                    return Visit(block);
+                }
+                catch (ReturnException returnEx)
+                {
+                    return returnEx.ReturnValue; // Return değeri yakalandığında döndür
+                }
+            };
+
+            return null;
+        }
+
+        public object VisitReturnStatement([NotNull] ARPAParser.ReturnStatementContext context)
+        {
+            object returnValue = context.expression() != null ? Visit(context.expression()) : null;
+            throw new ReturnException(returnValue); // Return ifadesi için özel exception fırlat
         }
     }
 }
