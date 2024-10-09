@@ -170,7 +170,7 @@ namespace ARPA_Programming_Language.Tests
         {
             string code = @"
     sayi x = 0;
-    eger (x < 5) {
+    iken (x < 5) {
         yazdir(x);
         x = x + 1;
     }
@@ -190,7 +190,7 @@ namespace ARPA_Programming_Language.Tests
         {
             string code = @"
     sayi toplam = 0;
-    for (sayi i = 0; i < 5; i = i + 1) {
+    icin (sayi i = 0; i < 5; i = i + 1) {
         toplam = toplam + i;
     }
     yazdir(toplam);

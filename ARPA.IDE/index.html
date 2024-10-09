@@ -1,0 +1,132 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arpa Editor with IntelliSense</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        #container {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.28.1/min/vs/loader.js"></script>
+    <script>
+        require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.28.1/min/vs' } });
+        require(['vs/editor/editor.main'], function () {
+            // Arpa dilini kaydet
+            monaco.languages.register({ id: 'arpa' });
+
+            // Dil özellikleri (Yorum satırı gibi eklemeler yapılabilir)
+            monaco.languages.setLanguageConfiguration('arpa', {
+                comments: {
+                    lineComment: '//'
+                }
+            });
+
+            monaco.languages.setMonarchTokensProvider('arpa', {
+                tokenizer: {
+                    root: [
+                        [/\b(eger|degilse|degilseeger|dondur|fonksiyon)\b/, 'keyword'], // Anahtar kelimeler
+                        [/\b(sayi|metin|ondalik|mantik|bos)\b/, 'type'], // Veri tipleri
+                        [/[a-zA-Z_]\w*/, 'identifier'], // Değişken isimleri
+                        [/\d+/, 'number'], // Sayılar
+                        [/".*?"/, 'string'], // Metinler
+                        [/[{}()\[\]]/, '@brackets'], // Parantezler
+                        [/\/\/.*$/, 'comment'], // Yorum satırları
+                    ]
+                }
+            });
+
+            monaco.editor.defineTheme('myCustomTheme', {
+                base: 'vs-dark',
+                inherit: true,
+                rules: [
+                    { token: 'keyword', foreground: '569cd6', fontStyle: 'bold' },
+                    { token: 'type', foreground: '4ec9b0' },
+                    { token: 'number', foreground: 'b5cea8' },
+                    { token: 'string', foreground: 'ce9178' },
+                    { token: 'comment', foreground: '6a9955', fontStyle: 'italic' },
+                    { token: 'identifier', foreground: 'dcdcaa' },
+                ]
+            });
+
+            // Temel IntelliSense önerileri
+            monaco.languages.registerCompletionItemProvider('arpa', {
+                provideCompletionItems: function () {
+                    var suggestions = [
+                        {
+                            label: 'eger',
+                            kind: monaco.languages.CompletionItemKind.Keyword,
+                            insertText: 'eger () {\n\t\n}'
+                        },
+                        {
+                            label: 'degilse',
+                            kind: monaco.languages.CompletionItemKind.Keyword,
+                            insertText: 'degilse {\n\t\n}'
+                        },
+                        {
+                            label: 'dondur',
+                            kind: monaco.languages.CompletionItemKind.Keyword,
+                            insertText: 'dondur;'
+                        },
+                        {
+                            label: 'sayi',
+                            kind: monaco.languages.CompletionItemKind.Keyword,
+                            insertText: 'sayi a = 0;'
+                        },
+                        {
+                            label: 'metin',
+                            kind: monaco.languages.CompletionItemKind.Keyword,
+                            insertText: 'metin arpa = "Merhaba, dünya!";'
+                        },
+                        {
+                            label: 'ondalik',
+                            kind: monaco.languages.CompletionItemKind.Keyword,
+                            insertText: 'ondalik arpa = 1.5;'
+                        },
+                        {
+                            label: 'mantik',
+                            kind: monaco.languages.CompletionItemKind.Keyword,
+                            insertText: 'mantik arpa = dogru;'
+                        },
+                        {
+                            label: 'yazdir',
+                            kind: monaco.languages.CompletionItemKind.Keyword,
+                            insertText: 'yazdir("Merhaba, dünya!");'
+                        },
+                        {
+                            label: 'fonksiyon',
+                            kind: monaco.languages.CompletionItemKind.Snippet,
+                            insertText: 'bos ARPA (sayi a, ondalik r, metin p, mantik a) {\n\t\n}'
+                        },
+                        {
+                            label: 'degilseeğer',
+                            kind: monaco.languages.CompletionItemKind.Keyword,
+                            insertText: 'degilseeger () {\n\t\n}'
+                        }
+                    ];
+                    return { suggestions: suggestions };
+                }
+            });
+
+            // Editörü başlat
+            window.editor = monaco.editor.create(document.getElementById('container'), {
+                value: '', // Başlangıç değeri boş
+                language: 'arpa', // Arpa dilini burada seçiyoruz
+                automaticLayout: true
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="container"></div>
+</body>
+</html>

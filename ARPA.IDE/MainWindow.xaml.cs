@@ -13,13 +13,29 @@ namespace ARPA.IDE
         public MainWindow()
         {
             InitializeComponent();
+            InitializeMonacoEditor();
         }
 
-        private void ButtonRun_Click(object sender, RoutedEventArgs e)
+        private async void InitializeMonacoEditor()
+        {
+            // WebView2'nin başlatılmasını bekleyin
+            await MonacoEditorWebView.EnsureCoreWebView2Async(null);
+
+            // Monaco Editor HTML dosyasını yükleyin
+            var indexPath = Path.Combine(Directory.GetCurrentDirectory(), "index.html");
+            MonacoEditorWebView.CoreWebView2.Navigate(indexPath);
+        }
+
+        private async void ButtonRun_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                string text = TextEditor.Text; // Kullanıcı kodunu al
+                // Monaco Editor'den yazılan kodu al
+                string text = await MonacoEditorWebView.ExecuteScriptAsync("window.editor.getValue();");
+
+                // Gelen string JSON formatında olabilir, bunu düzenle:
+                text = text.Trim('"').Replace("\\n", "\n").Replace("\\r", "\r");
+
                 var interpreter = new ARPAInterpreter();
 
                 // Kodu çalıştır
@@ -27,8 +43,8 @@ namespace ARPA.IDE
 
                 StringBuilder output = interpreter._output;
 
-                // Çıktıyı göster
-                TextBoxOutput.Text = output.ToString();
+                string cleanedOutput = output.ToString().Replace("\\", ""); // Tüm kaçış karakterlerini kaldır
+                TextBoxOutput.Text = cleanedOutput;
             }
             catch (Exception exception)
             {
@@ -42,13 +58,16 @@ namespace ARPA.IDE
             documentationWindow.ShowDialog();
         }
 
-        private void MenuItemNew_Click(object sender, RoutedEventArgs e)
+        private async void MenuItemNew_Click(object sender, RoutedEventArgs e)
         {
-            TextEditor.Clear();
-            TextBoxOutput.Text = string.Empty;
+            if (MonacoEditorWebView.CoreWebView2 != null)
+            {
+                // Yeni bir dosya için editörü temizler.
+                await MonacoEditorWebView.ExecuteScriptAsync("window.editor.setValue('');");
+            }
         }
 
-        private void MenuItemOpen_Click(object sender, RoutedEventArgs e)
+        private async void MenuItemOpen_Click(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog
             {
@@ -58,14 +77,18 @@ namespace ARPA.IDE
 
             if (openFileDialog.ShowDialog() == true)
             {
-                // Seçilen dosyanın içeriğini yükleyelim
                 string filePath = openFileDialog.FileName;
                 string fileContent = File.ReadAllText(filePath);
-                TextEditor.Text = fileContent;
+
+                if (MonacoEditorWebView.CoreWebView2 != null)
+                {
+                    // Seçilen dosyanın içeriğini Monaco Editör'e yükle.
+                    await MonacoEditorWebView.ExecuteScriptAsync($"window.editor.setValue(`{fileContent}`);");
+                }
             }
         }
 
-        private void MenuItemSave_Click(object sender, RoutedEventArgs e)
+        private async void MenuItemSave_Click(object sender, RoutedEventArgs e)
         {
             // SaveFileDialog kullanarak dosya kaydetme işlemi
             Microsoft.Win32.SaveFileDialog saveFileDialog = new Microsoft.Win32.SaveFileDialog
@@ -76,10 +99,44 @@ namespace ARPA.IDE
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                // Metin düzenleyici içeriğini seçilen dosyaya kaydedelim
                 string filePath = saveFileDialog.FileName;
-                File.WriteAllText(filePath, TextEditor.Text);
+
+                if (MonacoEditorWebView.CoreWebView2 != null)
+                {
+                    // Monaco Editör'den mevcut içeriği al
+                    string editorContent = await MonacoEditorWebView.ExecuteScriptAsync("window.editor.getValue();");
+                   
+
+                    // İçeriği dosyaya kaydet
+                    File.WriteAllText(filePath, editorContent);
+                }
             }
+        }
+
+        private async void ThemeComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            //if (MonacoEditorWebView.CoreWebView2 != null && ThemeComboBox.SelectedItem is ComboBoxItem selectedItem)
+            //{
+            //    string themeName = selectedItem.Content.ToString();
+
+            //    switch (themeName)
+            //    {
+            //        case "Light":
+            //            await MonacoEditorWebView.ExecuteScriptAsync("monaco.editor.setTheme('vs');");
+            //            break;
+            //        case "Dark":
+            //            await MonacoEditorWebView.ExecuteScriptAsync("monaco.editor.setTheme('vs-dark');");
+            //            break;
+            //        case "High Contrast":
+            //            await MonacoEditorWebView.ExecuteScriptAsync("monaco.editor.setTheme('hc-black');");
+            //            break;
+            //    }
+            //}
+        }
+
+        private void ThemeComboBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            ThemeComboBox.SelectedIndex = 0;
         }
     }
 }

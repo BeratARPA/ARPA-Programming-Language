@@ -4,8 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ARPA.IDE" xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+        xmlns:wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
         mc:Ignorable="d"
-        Title="ARPA Studio" Height="600" Width="800" MinHeight="600" MinWidth="800" WindowStartupLocation="CenterScreen" ResizeMode="CanResize">
+        Title="ARPA Studio" Height="600" Width="800" MinHeight="600" MinWidth="800" 
+        WindowStartupLocation="CenterScreen" ResizeMode="CanResize" Icon="\Resources\Images\Barley.ico" WindowState="Maximized">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -24,13 +26,22 @@
             <MenuItem Header="Yardım">
                 <MenuItem Header="Dökümantasyon" Click="MenuItemDocumentation_Click"/>
             </MenuItem>
+            <MenuItem Header="Görünüm">
+                <MenuItem Header="Tema Seç">
+                    <ComboBox x:Name="ThemeComboBox" Loaded="ThemeComboBox_Loaded" SelectionChanged="ThemeComboBox_SelectionChanged" Width="150" Margin="5">
+                        <ComboBoxItem Content="Light" IsSelected="True"/>
+                        <ComboBoxItem Content="Dark"/>
+                        <ComboBoxItem Content="High Contrast"/>
+                    </ComboBox>
+                </MenuItem>
+            </MenuItem>
         </Menu>
 
-        <!-- Metin Düzenleyici -->
-        <avalonEdit:TextEditor Grid.Row="1" Name="TextEditor" ShowLineNumbers="True" SyntaxHighlighting="C#" FontFamily="Consolas" FontSize="15"/>
+        <!-- WebView2: Monaco Editor -->
+        <wpf:WebView2 x:Name="MonacoEditorWebView" Grid.Row="1" />
 
         <!-- Çalıştırma Butonu -->
-        <Button Name="ButtonRun" Content="Çalıştır" Click="ButtonRun_Click" Grid.Row="2" Margin="5" />
+        <Button Name="ButtonRun" Content="Çalıştır" Click="ButtonRun_Click" Grid.Row="2" Margin="5"/>
 
         <!-- Çıktı Penceresi -->
         <TextBox Name="TextBoxOutput" Height="150" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" FontFamily="Consolas" FontSize="15" Grid.Row="3" />
