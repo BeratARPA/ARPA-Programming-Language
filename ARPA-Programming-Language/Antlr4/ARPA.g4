@@ -65,11 +65,11 @@ SAĞSÜSLÜPARANTEZ: '}';
 NOKTALIVİRGÜL: ';';
 VİRGÜL: ',';
 
-SAYI: 'sayı';
+SAYI: 'sayi';
 METİN: 'metin';
-ONDALIK: 'ondalık';
-MANTIK: 'mantık';
-BOŞ: 'boş';
+ONDALIK: 'ondalik';
+MANTIK: 'mantik';
+BOŞ: 'bos';
 
 ARTI: '+';
 EKSİ: '-';
@@ -87,13 +87,13 @@ KÜÇÜK: '<';
 BÜYÜKEŞİT: '>=';
 KÜÇÜKEŞİT: '<=';
 
-EĞER: 'eğer';
-DEĞİLSEEĞER: 'değilseeğer';
-DEĞİLSE: 'değilse';
-İÇİN: 'için';
+EĞER: 'eger';
+DEĞİLSEEĞER: 'degilseeger';
+DEĞİLSE: 'degilse';
+İÇİN: 'icin';
 İKEN: 'iken';
-YAZDIR: 'yazdır';
-DÖNDÜR: 'döndür'; // Döndür anahtar kelimesi
+YAZDIR: 'yazdir';
+DÖNDÜR: 'dondur'; // Döndür anahtar kelimesi
 
 ID: [a-zA-Z_][a-zA-Z0-9_]*;
 NUMBER: '-'? [0-9]+('.'[0-9]+)?;

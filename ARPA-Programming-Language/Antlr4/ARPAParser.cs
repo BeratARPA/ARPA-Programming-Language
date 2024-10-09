@@ -55,11 +55,10 @@ public partial class ARPAParser : Parser {
 	};
 
 	private static readonly string[] _LiteralNames = {
-		null, "'('", "')'", "'{'", "'}'", "';'", "','", "'say\\u0131'", "'metin'", 
-		"'ondal\\u0131k'", "'mant\\u0131k'", "'bo\\u015F'", "'+'", "'-'", "'*'", 
-		"'/'", "'%'", "'='", "'ve'", "'veya'", "'=='", "'!='", "'>'", "'<'", "'>='", 
-		"'<='", "'e\\u011Fer'", "'de\\u011Filsee\\u011Fer'", "'de\\u011Filse'", 
-		"'i\\u00E7in'", "'iken'", "'yazd\\u0131r'", "'d\\u00F6nd\\u00FCr'"
+		null, "'('", "')'", "'{'", "'}'", "';'", "','", "'sayi'", "'metin'", "'ondalik'", 
+		"'mantik'", "'bos'", "'+'", "'-'", "'*'", "'/'", "'%'", "'='", "'ve'", 
+		"'veya'", "'=='", "'!='", "'>'", "'<'", "'>='", "'<='", "'eger'", "'degilseeger'", 
+		"'degilse'", "'icin'", "'iken'", "'yazdir'", "'dondur'"
 	};
 	private static readonly string[] _SymbolicNames = {
 		null, "SOLPARANTEZ", "SA\u0002PARANTEZ", "SOLS\u0004SL\u0007PARANTEZ", 

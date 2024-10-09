@@ -45,10 +45,10 @@ namespace ARPA.IDE
             <h2>1. Veri Tipleri</h2>
             <p>ARPA dilinde dört temel veri tipi bulunmaktadır:</p>
             <ul>
-                <li><strong>sayı</strong>: Tam sayıları ifade eder. Örnek: <code>sayı x = 10;</code></li>
-                <li><strong>ondalık</strong>: Ondalıklı sayıları ifade eder. Örnek: <code>ondalık y = 3.14;</code></li>
+                <li><strong>sayi</strong>: Tam sayıları ifade eder. Örnek: <code>sayi x = 10;</code></li>
+                <li><strong>ondalik</strong>: Ondalıklı sayıları ifade eder. Örnek: <code>ondalik y = 3.14;</code></li>
                 <li><strong>metin</strong>: Metin değerlerini ifade eder. Örnek: <code>metin ad = ""Berat"";</code></li>
-                <li><strong>mantık</strong>: Mantıksal değerleri ifade eder. <code>doğru</code> ve <code>yanlış</code> değerlerini alabilir. Örnek: <code>mantık sonuc = doğru;</code></li>
+                <li><strong>mantik</strong>: Mantıksal değerleri ifade eder. <code>dogru</code> ve <code>yanlis</code> değerlerini alabilir. Örnek: <code>mantik sonuc = dogru;</code></li>
             </ul>
 
             <h2>2. Değişken Tanımlama</h2>
@@ -56,9 +56,9 @@ namespace ARPA.IDE
             <pre><code><veri tipi> <değişken adı> = <değer>;</code></pre>
             <p><strong>Örnek:</strong></p>
             <pre><code>
-sayı yaş = 21;
+sayi yaş = 21;
 metin isim = ""Arpa"";
-mantık öğrenciMi = doğru;
+mantik öğrenciMi = dogru;
             </code></pre>
 
             <h2>3. Atama İşlemleri</h2>
@@ -71,67 +71,67 @@ isim = ""Yeni Ad"";
             </code></pre>
 
             <h2>4. Fonksiyonlar</h2>
-            <p>ARPA'da fonksiyonlar, veri tipi belirlenerek tanımlanır ve isteğe bağlı parametreler alabilir. Fonksiyonun dönüş tipi belirlenmelidir. Eğer dönüş değeri yoksa <code>boş</code> kullanılır.</p>
+            <p>ARPA'da fonksiyonlar, veri tipi belirlenerek tanımlanır ve isteğe bağlı parametreler alabilir. Fonksiyonun dönüş tipi belirlenmelidir. Eğer dönüş değeri yoksa <code>bos</code> kullanılır.</p>
             <pre><code><veri tipi> <fonksiyon adı>(<parametre listesi>) {
     // Fonksiyon gövdesi
 }
             </code></pre>
             <p><strong>Örnek:</strong></p>
             <pre><code>
-sayı topla(sayı a, sayı b) {
-    döndür a + b;
+sayi topla(sayi a, sayi b) {
+    dondur a + b;
 }
             </code></pre>
 
             <h2>5. Koşul Yapıları</h2>
             <p>ARPA'da koşul yapıları Türkçe anahtar kelimelerle tanımlanır.</p>
             <ul>
-                <li><strong>eğer</strong>: Bir koşulun doğru olup olmadığını kontrol eder.</li>
-                <li><strong>değilseeğer</strong>: Eğer önceki <code>eğer</code> bloğu başarısız olursa, ek bir koşulu kontrol eder.</li>
-                <li><strong>değilse</strong>: Tüm diğer koşullar başarısız olursa çalışır.</li>
+                <li><strong>eger</strong>: Bir koşulun doğru olup olmadığını kontrol eder.</li>
+                <li><strong>degilseeger</strong>: Eğer önceki <code>eğer</code> bloğu başarısız olursa, ek bir koşulu kontrol eder.</li>
+                <li><strong>degilse</strong>: Tüm diğer koşullar başarısız olursa çalışır.</li>
             </ul>
             <pre><code>
-eğer (koşul) {
+eger (koşul) {
     // Koşul doğruysa çalışacak kod
-} değilseeğer (koşul) {
+} degilseeger (koşul) {
     // Alternatif koşul doğruysa çalışacak kod
-} değilse {
+} degilse {
     // Hiçbir koşul doğru değilse çalışacak kod
 }
             </code></pre>
             <p><strong>Örnek:</strong></p>
             <pre><code>
-eğer (yaş > 18) {
-    yazdır(""Reşit"");
-} değilseeğer (yaş == 18) {
-    yazdır(""Yeni reşit"");
-} değilse {
-    yazdır(""Reşit değil"");
+eger (yaş > 18) {
+    yazdir(""Reşit"");
+} degilseeger (yaş == 18) {
+    yazdir(""Yeni reşit"");
+} degilse {
+    yazdir(""Reşit değil"");
 }
             </code></pre>
 
             <h2>6. Girdi/Çıktı İşlemleri</h2>
-            <p>Program boyunca kullanıcıya bilgi vermek veya ekrana yazdırmak için <code>yazdır</code> komutu kullanılır.</p>
-            <pre><code>yazdır(<ifade>);</code></pre>
+            <p>Program boyunca kullanıcıya bilgi vermek veya ekrana yazdırmak için <code>yazdir</code> komutu kullanılır.</p>
+            <pre><code>yazdir(<ifade>);</code></pre>
             <p><strong>Örnek:</strong></p>
-            <pre><code>yazdır(""Merhaba Dünya!"");</code></pre>
+            <pre><code>yazdir(""Merhaba Dünya!"");</code></pre>
 
             <h2>7. Fonksiyon Çağırma</h2>
             <p>Fonksiyonlar isimleri ile çağrılır ve parametreler parantez içinde verilir.</p>
             <pre><code><fonksiyon adı>(<parametreler>);</code></pre>
             <p><strong>Örnek:</strong></p>
             <pre><code>
-sayı sonuc = topla(5, 10);
-yazdır(sonuc);
+sayi sonuc = topla(5, 10);
+yazdir(sonuc);
             </code></pre>
 
             <h2>8. Geri Dönüş Değeri</h2>
-            <p>Bir fonksiyonun sonucunu döndürmek için <code>döndür</code> anahtar kelimesi kullanılır.</p>
-            <pre><code>döndür <ifade>;</code></pre>
+            <p>Bir fonksiyonun sonucunu döndürmek için <code>dondur</code> anahtar kelimesi kullanılır.</p>
+            <pre><code>dondur <ifade>;</code></pre>
             <p><strong>Örnek:</strong></p>
             <pre><code>
-sayı kare(sayı x) {
-    döndür x * x;
+sayi kare(sayi x) {
+    dondur x * x;
 }
             </code></pre>
 
