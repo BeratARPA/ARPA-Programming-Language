@@ -7,7 +7,8 @@
         xmlns:wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
         mc:Ignorable="d"
         Title="ARPA Studio" Height="600" Width="800" MinHeight="600" MinWidth="800" 
-        WindowStartupLocation="CenterScreen" ResizeMode="CanResize" Icon="\Resources\Images\Barley.ico" WindowState="Maximized">
+        WindowStartupLocation="CenterScreen" ResizeMode="CanResize" Icon="\Resources\Images\Barley.ico" WindowState="Maximized"
+        Background="#D89D56">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -17,33 +18,34 @@
         </Grid.RowDefinitions>
 
         <!-- Menü Çubuğu -->
-        <Menu Grid.Row="0">
+        <Menu Grid.Row="0" Background="#D89D56" Foreground="White">
             <MenuItem Header="Dosya">
-                <MenuItem Header="Yeni" Click="MenuItemNew_Click"/>
-                <MenuItem Header="Aç" Click="MenuItemOpen_Click"/>
-                <MenuItem Header="Kaydet" Click="MenuItemSave_Click"/>
+                <MenuItem Header="Yeni" Click="MenuItemNew_Click" Foreground="Black"/>
+                <MenuItem Header="Aç" Click="MenuItemOpen_Click" Foreground="Black"/>
+                <MenuItem Header="Kaydet" Click="MenuItemSave_Click" Foreground="Black"/>
             </MenuItem>
             <MenuItem Header="Yardım">
-                <MenuItem Header="Dökümantasyon" Click="MenuItemDocumentation_Click"/>
+                <MenuItem Header="Dökümantasyon" Click="MenuItemDocumentation_Click" Foreground="Black"/>
             </MenuItem>
             <MenuItem Header="Görünüm">
-                <MenuItem Header="Tema Seç">
-                    <ComboBox x:Name="ThemeComboBox" Loaded="ThemeComboBox_Loaded" SelectionChanged="ThemeComboBox_SelectionChanged" Width="150" Margin="5">
-                        <ComboBoxItem Content="Light" IsSelected="True"/>
-                        <ComboBoxItem Content="Dark"/>
-                        <ComboBoxItem Content="High Contrast"/>
+                <MenuItem Header="Tema Seç" Foreground="Black">
+                    <ComboBox x:Name="ThemeComboBox" Loaded="ThemeComboBox_Loaded" SelectionChanged="ThemeComboBox_SelectionChanged" Width="150" Margin="5" Foreground="Black">
+                        <ComboBoxItem Content="Light" IsSelected="True" Foreground="Black"/>
+                        <ComboBoxItem Content="Dark" Foreground="Black"/>
+                        <ComboBoxItem Content="High Contrast" Foreground="Black"/>
                     </ComboBox>
                 </MenuItem>
             </MenuItem>
         </Menu>
 
         <!-- WebView2: Monaco Editor -->
-        <wpf:WebView2 x:Name="MonacoEditorWebView" Grid.Row="1" />
+        <wpf:WebView2 x:Name="MonacoEditorWebView" Grid.Row="1" Margin="5" />
 
         <!-- Çalıştırma Butonu -->
-        <Button Name="ButtonRun" Content="Çalıştır" Click="ButtonRun_Click" Grid.Row="2" Margin="5"/>
+        <Button Name="ButtonRun" Content="Çalıştır" Click="ButtonRun_Click" Grid.Row="2" Margin="5" Background="#A56F42" Foreground="White" FontWeight="Bold" Height="40" />
 
         <!-- Çıktı Penceresi -->
-        <TextBox Name="TextBoxOutput" Height="150" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" FontFamily="Consolas" FontSize="15" Grid.Row="3" />
+        <TextBox Name="TextBoxOutput" Height="150" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" 
+                 FontFamily="Consolas" FontSize="15" Grid.Row="3" Margin="5" Background="#f4f4f4" BorderBrush="#ccc" BorderThickness="1" Padding="5" />
     </Grid>
 </Window>

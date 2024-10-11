@@ -121,6 +121,26 @@ public interface IARPAListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitIfStatement([NotNull] ARPAParser.IfStatementContext context);
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="ARPAParser.whileLoopStatement"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterWhileLoopStatement([NotNull] ARPAParser.WhileLoopStatementContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="ARPAParser.whileLoopStatement"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitWhileLoopStatement([NotNull] ARPAParser.WhileLoopStatementContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="ARPAParser.forLoopStatement"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterForLoopStatement([NotNull] ARPAParser.ForLoopStatementContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="ARPAParser.forLoopStatement"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitForLoopStatement([NotNull] ARPAParser.ForLoopStatementContext context);
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="ARPAParser.printStatement"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>

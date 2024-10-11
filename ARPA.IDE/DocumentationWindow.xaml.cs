@@ -23,6 +23,7 @@ namespace ARPA.IDE
         {
             InitializeComponent();
 
+
             string htmlContent = @"
         <html>
         <head>
@@ -39,7 +40,7 @@ namespace ARPA.IDE
         <body>
             <h1>ARPA Programlama Dili Dökümantasyonu</h1>
             <p>
-                ARPA, C# tabanlı ve sadece Türkçe sözdizimi kullanan bir programlama dilidir. Temel veri tiplerinden kontrol yapılarında, fonksiyon tanımlamalarına kadar C# ile benzerlik gösterir, ancak Türkçe anahtar kelimelerle çalışır.
+                ARPA, C# tabanlı ve yalnızca Türkçe sözdizimi kullanan bir programlama dilidir. Temel veri tiplerinden kontrol yapıları, fonksiyon tanımlamalarına kadar C# ile benzerlik gösterir, ancak Türkçe anahtar kelimelerle çalışır. ARPA, kullanıcıların Türkçe ile daha doğal bir programlama deneyimi yaşamalarını sağlamak amacıyla geliştirilmiştir.
             </p>
 
             <h2>1. Veri Tipleri</h2>
@@ -87,7 +88,7 @@ sayi topla(sayi a, sayi b) {
             <p>ARPA'da koşul yapıları Türkçe anahtar kelimelerle tanımlanır.</p>
             <ul>
                 <li><strong>eger</strong>: Bir koşulun doğru olup olmadığını kontrol eder.</li>
-                <li><strong>degilseeger</strong>: Eğer önceki <code>eğer</code> bloğu başarısız olursa, ek bir koşulu kontrol eder.</li>
+                <li><strong>degilseeger</strong>: Eğer önceki <code>eger</code> bloğu başarısız olursa, ek bir koşulu kontrol eder.</li>
                 <li><strong>degilse</strong>: Tüm diğer koşullar başarısız olursa çalışır.</li>
             </ul>
             <pre><code>
@@ -134,6 +135,24 @@ sayi kare(sayi x) {
     dondur x * x;
 }
             </code></pre>
+
+            <h2>9. Döngüler</h2>
+            <p>ARPA dilinde döngü yapıları, tekrarlayan işlemleri kolayca gerçekleştirmek için kullanılır. Temel döngü yapıları arasında <code>while</code> ve <code>for</code> döngüleri bulunmaktadır.</p>
+            <ul>
+                <li><strong>while döngüsü</strong>: Koşul doğru olduğu sürece çalışır.</li>
+                <li><strong>for döngüsü</strong>: Belirli bir sayıda tekrarlama yapar.</li>
+            </ul>
+            <pre><code>
+sayi i = 0;
+while (i < 10) {
+    yazdir(i);
+    i = i + 1;
+}
+
+for (sayi j = 0; j < 10; j = j + 1) {
+    yazdir(j);
+}
+            </code></pre>          
 
         </body>
         </html>";

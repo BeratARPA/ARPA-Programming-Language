@@ -144,6 +144,30 @@ public partial class ARPABaseListener : IARPAListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitIfStatement([NotNull] ARPAParser.IfStatementContext context) { }
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="ARPAParser.whileLoopStatement"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterWhileLoopStatement([NotNull] ARPAParser.WhileLoopStatementContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="ARPAParser.whileLoopStatement"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitWhileLoopStatement([NotNull] ARPAParser.WhileLoopStatementContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="ARPAParser.forLoopStatement"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterForLoopStatement([NotNull] ARPAParser.ForLoopStatementContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="ARPAParser.forLoopStatement"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitForLoopStatement([NotNull] ARPAParser.ForLoopStatementContext context) { }
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="ARPAParser.printStatement"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>

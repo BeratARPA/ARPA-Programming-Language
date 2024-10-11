@@ -86,6 +86,18 @@ public interface IARPAVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitIfStatement([NotNull] ARPAParser.IfStatementContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="ARPAParser.whileLoopStatement"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitWhileLoopStatement([NotNull] ARPAParser.WhileLoopStatementContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="ARPAParser.forLoopStatement"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitForLoopStatement([NotNull] ARPAParser.ForLoopStatementContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="ARPAParser.printStatement"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>

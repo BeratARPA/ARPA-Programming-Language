@@ -45,17 +45,23 @@ namespace ARPA_Programming_Language.Tests
         public void VariableDeclarationAndAssignment_ShouldWorkCorrectly()
         {
             string code = @"
-    sayi x = 10;
-    ondalik y = 20.5;
-    metin z = ""Merhaba"";
-    yazdir(x);
-    yazdir(y);
-    yazdir(z);
+    sayi a = 10;
+    ondalik b = 20.5;
+    metin c = ""Merhaba"";
+    mantik d = dogru;
+    mantik e = yanlis;
+    yazdir(a);
+    yazdir(b);
+    yazdir(c);
+    yazdir(d);
+    yazdir(e);
     ";
             string expectedOutput = @"
     10
     20,5
-    Merhaba";
+    Merhaba
+    True
+    False";
 
             ExecuteAndAssertOutput(code, expectedOutput);
         }
@@ -65,9 +71,9 @@ namespace ARPA_Programming_Language.Tests
         {
             string code = @"
     sayi x = 10 + 5;
-    ondalik y = 20.0 / 2.0;
+    ondalik y = 20.0 / 2.0;    
     yazdir(x);
-    yazdir(y);
+    yazdir(y);   
     ";
             string expectedOutput = @"
     15
@@ -104,9 +110,9 @@ namespace ARPA_Programming_Language.Tests
     yazdir(result3);
     ";
             string expectedOutput = @"
-    true
-    true
-    false";
+    True
+    True
+    False";
 
             ExecuteAndAssertOutput(code, expectedOutput);
         }
@@ -189,11 +195,11 @@ namespace ARPA_Programming_Language.Tests
         public void ForLoop_ShouldWorkCorrectly()
         {
             string code = @"
-    sayi toplam = 0;
-    icin (sayi i = 0; i < 5; i = i + 1) {
-        toplam = toplam + i;
-    }
-    yazdir(toplam);
+sayi toplam = 0;
+icin (sayi i = 0; i < 5; i = i + 1) {
+    toplam = toplam + i;
+}
+yazdir(toplam);
     ";
             string expectedOutput = "10"; // 0 + 1 + 2 + 3 + 4 = 10
 
@@ -267,14 +273,14 @@ namespace ARPA_Programming_Language.Tests
         public void LogicalOperators_ShouldWorkCorrectly()
         {
             string code = @"
-    mantik result1 = true ve false;
-    mantik result2 = true veya false;
-    yazdir(result1);
-    yazdir(result2);
+        mantik a = dogru ve yanlis;
+        mantik b = dogru veya yanlis;
+        yazdir(a);
+        yazdir(b)
     ";
             string expectedOutput = @"
-    false
-    true";
+    False
+    True";
 
             ExecuteAndAssertOutput(code, expectedOutput);
         }
@@ -293,6 +299,31 @@ namespace ARPA_Programming_Language.Tests
 
             ExecuteAndAssertOutput(code, expectedOutput);
         }
+
+        [Test]
+        public void LogicalOperatorsInConditions_ShouldWorkCorrectly()
+        {
+            string code = @"
+    mantik a = dogru;
+    mantik b = yanlis;
+    eger (a ve b) {
+        yazdir(""Hatalı"");
+    } degilse {
+        yazdir(""Dogru"");
+    }
+    
+    eger (a veya b) {
+        yazdir(""Dogru"");
+    } degilse {
+        yazdir(""Hatalı"");
+    }       
+    ";
+            string expectedOutput = @"
+    Dogru
+    Dogru";
+
+            ExecuteAndAssertOutput(code, expectedOutput);
+        }       
 
         [Test]
         public void ExceptionOnInvalidFunctionCall_ShouldThrowException()
@@ -320,6 +351,5 @@ namespace ARPA_Programming_Language.Tests
 
             ExecuteAndAssertOutput(code, expectedOutput);
         }
-
     }
 }

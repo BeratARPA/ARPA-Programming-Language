@@ -7,93 +7,109 @@ statement:
     | assignment
     | expressionStatement
     | ifStatement
+    | whileLoopStatement
+    | forLoopStatement
     | printStatement
     | block
     | functionCall
-    | returnStatement; // Return (döndür) ifadesi eklendi
+    | returnStatement;
 
 declaration: 
       variableDeclaration 
     | functionDeclaration;
 
 variableDeclaration: 
-      (SAYI | METİN | ONDALIK | MANTIK) ID (ATAMA expression)? NOKTALIVİRGÜL;
+      (SAYI | METIN | ONDALIK | MANTIK) ID (ATAMA expression)? NOKTALIVIRGUL;
 
 functionDeclaration: 
-      (SAYI | METİN | ONDALIK | MANTIK | BOŞ) ID SOLPARANTEZ (paramList)? SAĞPARANTEZ block;
+      (SAYI | METIN | ONDALIK | MANTIK | BOS) ID SOLPARANTEZ (paramList)? SAGPARANTEZ block;
 
-paramList: ID (VİRGÜL ID)*;
+paramList: 
+      ID (VIRGUL ID)*;
 
 assignment: 
-      ID ATAMA expression NOKTALIVİRGÜL;
+      ID ATAMA expression NOKTALIVIRGUL;
 
 expressionStatement: 
-      expression NOKTALIVİRGÜL;
+      expression NOKTALIVIRGUL;
 
 ifStatement: 
-      EĞER SOLPARANTEZ expression SAĞPARANTEZ block (DEĞİLSEEĞER SOLPARANTEZ expression SAĞPARANTEZ block)? (DEĞİLSE block)?;
+      EGER SOLPARANTEZ expression SAGPARANTEZ block (DEGILSEEGER SOLPARANTEZ expression SAGPARANTEZ block)? (DEGILSE block)?;
+
+whileLoopStatement: 
+      IKEN SOLPARANTEZ expression SAGPARANTEZ block;
+
+forLoopStatement: 
+      ICIN SOLPARANTEZ variableDeclaration? expression? NOKTALIVIRGUL assignment? SAGPARANTEZ block;
 
 printStatement: 
-      YAZDIR SOLPARANTEZ expression SAĞPARANTEZ NOKTALIVİRGÜL;
+      YAZDIR SOLPARANTEZ expression SAGPARANTEZ NOKTALIVIRGUL;
 
 block: 
-      SOLSÜSLÜPARANTEZ statement* SAĞSÜSLÜPARANTEZ;
+      SOLSUSLUPARANTEZ statement* SAGSUSLUPARANTEZ;
 
 returnStatement: 
-      DÖNDÜR expression NOKTALIVİRGÜL; // Döndür ifadesi tanımlandı
+      DONDUR expression? NOKTALIVIRGUL;
 
 expression: 
-      expression (ARTI | EKSİ | ÇARPIM | BÖLÜ | MOD) expression 
-    | expression (EŞİT | EŞİTDEĞİL | BÜYÜK | KÜÇÜK | BÜYÜKEŞİT | KÜÇÜKEŞİT) expression
+      expression VEYA expression
+    | expression VE expression
+    | expression (ESIT | ESITDEGIL | BUYUK | KUCUK | BUYUKESIT | KUCUKESIT) expression
+    | expression (ARTI | EKSI) expression
+    | expression (CARPIM | BOLU | MOD) expression
     | ID
     | NUMBER
     | STRING
-    | MANTIK
+    | TRUE
+    | FALSE
     | functionCall
-    | SOLPARANTEZ expression SAĞPARANTEZ;
+    | SOLPARANTEZ expression SAGPARANTEZ;
 
 functionCall: 
-      ID SOLPARANTEZ (argList)? SAĞPARANTEZ;
+      ID SOLPARANTEZ (argList)? SAGPARANTEZ;
 
-argList: expression (VİRGÜL expression)*;
+argList: 
+      expression (VIRGUL expression)*;
 
 SOLPARANTEZ: '(';
-SAĞPARANTEZ: ')';
-SOLSÜSLÜPARANTEZ: '{';
-SAĞSÜSLÜPARANTEZ: '}';
+SAGPARANTEZ: ')';
+SOLSUSLUPARANTEZ: '{';
+SAGSUSLUPARANTEZ: '}';
 
-NOKTALIVİRGÜL: ';';
-VİRGÜL: ',';
+NOKTALIVIRGUL: ';';
+VIRGUL: ',';
 
 SAYI: 'sayi';
-METİN: 'metin';
+METIN: 'metin';
 ONDALIK: 'ondalik';
 MANTIK: 'mantik';
-BOŞ: 'bos';
+BOS: 'bos';
+TRUE : 'dogru';
+FALSE : 'yanlis';
 
 ARTI: '+';
-EKSİ: '-';
-ÇARPIM: '*';
-BÖLÜ: '/';
+EKSI: '-';
+CARPIM: '*';
+BOLU: '/';
 MOD: '%';
 
 ATAMA: '=';
-AND: 've';
-OR: 'veya';
-EŞİT: '==';
-EŞİTDEĞİL: '!=';
-BÜYÜK: '>';
-KÜÇÜK: '<';
-BÜYÜKEŞİT: '>=';
-KÜÇÜKEŞİT: '<=';
+VE: 've';
+VEYA: 'veya';
+ESIT: '==';
+ESITDEGIL: '!=';
+BUYUK: '>';
+KUCUK: '<';
+BUYUKESIT: '>=';
+KUCUKESIT: '<=';
 
-EĞER: 'eger';
-DEĞİLSEEĞER: 'degilseeger';
-DEĞİLSE: 'degilse';
-İÇİN: 'icin';
-İKEN: 'iken';
+EGER: 'eger';
+DEGILSEEGER: 'degilseeger';
+DEGILSE: 'degilse';
+ICIN: 'icin';
+IKEN: 'iken';
 YAZDIR: 'yazdir';
-DÖNDÜR: 'dondur'; // Döndür anahtar kelimesi
+DONDUR: 'dondur';
 
 ID: [a-zA-Z_][a-zA-Z0-9_]*;
 NUMBER: '-'? [0-9]+('.'[0-9]+)?;

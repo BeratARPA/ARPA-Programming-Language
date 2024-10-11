@@ -1,6 +1,7 @@
 ﻿using ARPA_Programming_Language.Antlr4;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
 
 namespace ARPA.IDE
@@ -34,7 +35,13 @@ namespace ARPA.IDE
                 string text = await MonacoEditorWebView.ExecuteScriptAsync("window.editor.getValue();");
 
                 // Gelen string JSON formatında olabilir, bunu düzenle:
-                text = text.Trim('"').Replace("\\n", "\n").Replace("\\r", "\r");
+                text = text.Trim('"').Replace("\\n", "\n").Replace("\\r", "\r").Replace("\\t", "\t");
+
+                // Unicode kaçış karakterlerini çözümlemek için bir Regex kullan
+                text = Regex.Unescape(text);
+
+                // Kaçış karakterlerini kaldır (örn. \\u003C yerine < koy)
+                text = Regex.Replace(text, @"\\u([0-9A-Fa-f]{4})", m => ((char)int.Parse(m.Groups[1].Value, System.Globalization.NumberStyles.HexNumber)).ToString());
 
                 var interpreter = new ARPAInterpreter();
 
@@ -43,7 +50,8 @@ namespace ARPA.IDE
 
                 StringBuilder output = interpreter._output;
 
-                string cleanedOutput = output.ToString().Replace("\\", ""); // Tüm kaçış karakterlerini kaldır
+                // Çıktıyı temizle ve ekrana yazdır
+                string cleanedOutput = output.ToString().Replace("\\", "");
                 TextBoxOutput.Text = cleanedOutput;
             }
             catch (Exception exception)

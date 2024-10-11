@@ -9,10 +9,10 @@ namespace ARPA_Programming_Language.Antlr4
 {
     public class ARPAInterpreter : IARPAVisitor<object>
     {
-        private Dictionary<string, Func<object[], object>> _functions = new Dictionary<string, Func<object[], object>>();
-        private readonly Dictionary<string, object> _variables = new Dictionary<string, object>();
-
-        public StringBuilder _output { get; private set; } = new StringBuilder();
+        private readonly Dictionary<string, Func<object[], object>> _functions = new();
+        private readonly Dictionary<string, object> _variables = new();
+        public List<string> _errors;
+        public StringBuilder _output = new();
 
         public object Visit(IParseTree tree)
         {
@@ -27,22 +27,28 @@ namespace ARPA_Programming_Language.Antlr4
 
         public void Execute(string userCode)
         {
-            // Kullanıcı kodunu parse et
+            var context = ParseUserCode(userCode);
+            _errors = new ARPAErrorListener().Errors;
+            Visit(context);
+        }
+
+        private IParseTree ParseUserCode(string userCode)
+        {
             var inputStream = new AntlrInputStream(userCode);
             var lexer = new ARPALexer(inputStream);
-            var commonTokenStream = new CommonTokenStream(lexer);
-            var parser = new ARPAParser(commonTokenStream);
-            var context = parser.program(); // Program bağlamını al
+            var tokenStream = new CommonTokenStream(lexer);
+            var parser = new ARPAParser(tokenStream);
+            parser.RemoveErrorListeners();
+            parser.AddErrorListener(new ARPAErrorListener());
 
-            // Programı çalıştır
-            Visit(context);
+            return parser.program();
         }
 
         public object VisitAssignment([NotNull] ARPAParser.AssignmentContext context)
         {
             var varName = context.ID().GetText();
             var value = Visit(context.expression());
-            _variables[varName] = value; // Değeri kaydet
+            _variables[varName] = value; // Store the value
             return value;
         }
 
@@ -84,206 +90,209 @@ namespace ARPA_Programming_Language.Antlr4
 
         public object VisitErrorNode(IErrorNode node)
         {
-            // node.Payload nesnesini IToken olarak cast ediyoruz.
             var token = node.Payload as IToken;
             if (token != null)
             {
                 var line = token.Line;
                 var column = token.Column;
-                throw new Exception($"Hata (Satır: {line}, Sütun: {column}): {node.GetText()}");
+                throw new Exception($"Error (Line: {line}, Column: {column}): {node.GetText()}");
             }
 
-            // Eğer cast başarısız olursa uygun bir hata fırlatıyoruz.
-            throw new Exception($"Hata: {node.GetText()} - Geçersiz token tipi.");
+            throw new Exception($"Error: {node.GetText()} - Invalid token type.");
         }
 
         public object VisitExpression([NotNull] ARPAParser.ExpressionContext context)
         {
-            // Sayı ifadelerini değerlendir
-            if (context.NUMBER() != null)
+            // Switch case context'in çeşitli child'larını kontrol eder.
+            return context switch
             {
-                var numberText = context.NUMBER().GetText();
-                if (double.TryParse(numberText, NumberStyles.Any, CultureInfo.InvariantCulture, out double result))
+                _ when context.TRUE() != null => true,
+                _ when context.FALSE() != null => false,
+                _ when context.NUMBER() != null => ParseNumber(context.NUMBER().GetText()),
+                _ when context.STRING() != null => context.STRING().GetText().Trim('"'),
+                _ when context.ID() != null => GetVariableValue(context.ID().GetText()),
+                _ when context.functionCall() != null => VisitFunctionCall(context.functionCall()),
+                _ => HandleComplexExpression(context)
+            };
+        }
+
+        private object ParseNumber(string numberText)
+        {
+            if (double.TryParse(numberText, NumberStyles.Any, CultureInfo.InvariantCulture, out double result))
+            {
+                return result; // Return the parsed number
+            }
+            throw new Exception($"Invalid number format: {numberText}");
+        }
+
+        private object GetVariableValue(string varName)
+        {
+            if (!_variables.TryGetValue(varName, out var value))
+            {
+                throw new InvalidOperationException($"Variable not defined: {varName}");
+            }
+            return value; // Return variable value
+        }
+
+        private object HandleComplexExpression(ARPAParser.ExpressionContext context)
+        {
+            if (context.ChildCount == 3)
+            {
+                var operatorSymbol = context.GetChild(1).GetText();
+                if (IsComparisonOperator(operatorSymbol))
                 {
-                    return result; // Başarılıysa sonucu döndür
+                    return EvaluateComparison(context);
                 }
-                else
+
+                if (IsArithmeticOperator(operatorSymbol))
                 {
-                    throw new Exception($"Invalid number format: {numberText}");
+                    return EvaluateArithmetic(context);
+                }
+
+                if (IsLogicalOperator(operatorSymbol))
+                {
+                    var left = Visit(context.expression(0));
+                    var right = Visit(context.expression(1));
+                    return EvaluateLogical(left, right, operatorSymbol);
+                }
+
+                if (context.GetChild(0).GetText() == "yazdır")
+                {
+                    return HandlePrintStatement(context);
                 }
             }
 
-            // String ifadelerini değerlendir
-            if (context.STRING() != null)
+            throw new NotImplementedException("Expression evaluation not defined.");
+        }
+
+        // Mantıksal operatör olup olmadığını kontrol eden metod
+        private bool IsLogicalOperator(string op) => op switch
+        {
+            "ve" => true,
+            "veya" => true,
+            _ => false
+        };
+
+        // Mantıksal operatörlerin değerlendirilmesi
+        private bool EvaluateLogical(object left, object right, string op)
+        {
+            if (left is bool leftBool && right is bool rightBool)
             {
-                return context.STRING().GetText().Trim('"'); // Metni değerlendir
+                return op switch
+                {
+                    "ve" => leftBool && rightBool,
+                    "veya" => leftBool || rightBool,
+                    _ => throw new InvalidOperationException($"Unsupported logical operation: {op}")
+                };
             }
 
-            // Değişken ifadelerini değerlendir
-            if (context.ID() != null)
+            throw new InvalidOperationException("Logical operations require boolean values.");
+        }
+
+        private object EvaluateComparison(ARPAParser.ExpressionContext context)
+        {
+            var left = Visit(context.expression(0));
+            var right = Visit(context.expression(1));
+
+            if (left == null || right == null)
             {
-                var varName = context.ID().GetText();
-                if (!_variables.ContainsKey(varName))
-                {
-                    throw new InvalidOperationException($"Değişken tanımlı değil: {varName}");
-                }
-                return _variables[varName]; // Değişkeni değerlendir
+                throw new InvalidOperationException("Values must be defined for comparison operations.");
             }
 
-            // Fonksiyon çağrısını değerlendir
-            if (context.functionCall() != null)
+            return (left, right) switch
             {
-                try
-                {
-                    return Visit(context.functionCall()); // Fonksiyon çağrısını değerlendir
-                }
-                catch (ReturnException returnEx)
-                {
-                    return returnEx.ReturnValue; // Dönüş değerini al
-                }
+                (double lValue, double rValue) => EvaluateDoubleComparison(lValue, rValue, context.GetChild(1).GetText()),
+                (string lStr, string rStr) => EvaluateStringComparison(lStr, rStr, context.GetChild(1).GetText()),
+                _ => throw new InvalidOperationException("Comparison operations can only be performed on numbers or strings.")
+            };
+        }
+
+        private bool EvaluateDoubleComparison(double left, double right, string op) => op switch
+        {
+            "==" => left == right,
+            "!=" => left != right,
+            ">" => left > right,
+            "<" => left < right,
+            ">=" => left >= right,
+            "<=" => left <= right,
+            _ => throw new InvalidOperationException($"Unsupported operation: {op}")
+        };
+
+        private bool EvaluateStringComparison(string left, string right, string op) => op switch
+        {
+            "==" => left.Equals(right),
+            "!=" => !left.Equals(right),
+            _ => throw new InvalidOperationException($"Unsupported operation for strings: {op}")
+        };
+
+        private object EvaluateArithmetic(ARPAParser.ExpressionContext context)
+        {
+            var left = Visit(context.expression(0));
+            var right = Visit(context.expression(1));
+
+            if (left == null || right == null)
+            {
+                throw new InvalidOperationException("Values must be defined for arithmetic operations.");
             }
 
-            if (context.expression().Length == 1)
+            if (left is double leftValue && right is double rightValue)
             {
-                return Visit(context.expression(0)); // Tek bir ifade varsa, onu değerlendir
+                return PerformArithmeticOperation(leftValue, rightValue, context.GetChild(1).GetText());
             }
 
-            // Koşullu ifadeleri değerlendir
-            if (context.ChildCount == 3 && IsComparisonOperator(context.GetChild(1).GetText()))
+            if (left is string leftStr || right is string rightStr)
             {
-                var left = Visit(context.expression(0));
-                var right = Visit(context.expression(1));
-
-                // Null kontrolü
-                if (left == null || right == null)
-                {
-                    throw new InvalidOperationException("Karşılaştırma işlemleri için değerler tanımlı olmalıdır.");
-                }
-
-                string op = context.GetChild(1).GetText(); // İşlem sembolü
-
-                // Karşılaştırma işlemleri
-                // Karşılaştırma işlemleri
-                bool result = left is double leftValue && right is double rightValue
-                    ? op switch
-                    {
-                        "==" => leftValue == rightValue,
-                        "!=" => leftValue != rightValue,
-                        ">" => leftValue > rightValue,
-                        "<" => leftValue < rightValue,
-                        ">=" => leftValue >= rightValue,
-                        "<=" => leftValue <= rightValue,
-                        _ => throw new InvalidOperationException($"Desteklenmeyen işlem: {op}")
-                    }
-                    : left is string leftStr && right is string rightStr
-                    ? op switch
-                    {
-                        "==" => leftStr.Equals(rightStr),
-                        "!=" => !leftStr.Equals(rightStr),
-                        _ => throw new InvalidOperationException($"String türü için desteklenmeyen işlem: {op}")
-                    }
-                    : throw new InvalidOperationException("Karşılaştırma işlemleri sadece sayılar veya string türleri ile yapılabilir.");
-
-                // Koşulun sonucunu döndür
-                return result; // Burada sonucu döndürdük
+                leftStr = left as string ?? left.ToString();
+                rightStr = right as string ?? right.ToString();
+                return leftStr + rightStr; // String concatenation
             }
 
-            // Aritmetik işlemleri değerlendir
-            if (context.ChildCount == 3 && IsArithmeticOperator(context.GetChild(1).GetText()))
+            throw new InvalidOperationException("Arithmetic operations require valid values.");
+        }
+
+        private double PerformArithmeticOperation(double left, double right, string op) => op switch
+        {
+            "+" => left + right,
+            "-" => left - right,
+            "*" => left * right,
+            "/" => left / right,
+            _ => throw new InvalidOperationException($"Unsupported operation: {op}")
+        };
+
+        private object HandlePrintStatement(ARPAParser.ExpressionContext context)
+        {
+            var left = Visit(context.expression(1));
+            var right = Visit(context.expression(2));
+
+            if (left == null || right == null)
             {
-                var left = Visit(context.expression(0));
-                var right = Visit(context.expression(1));
-
-                // Null kontrolü
-                if (left == null || right == null)
-                {
-                    throw new InvalidOperationException("Değerler tanımlı olmalıdır.");
-                }
-
-                string op = context.GetChild(1).GetText(); // İşlem sembolü
-
-                // Aritmetik işlemleri kontrol et
-                if (left is double leftValue && right is double rightValue)
-                {
-                    return op switch
-                    {
-                        "+" => leftValue + rightValue,
-                        "-" => leftValue - rightValue,
-                        "*" => leftValue * rightValue,
-                        "/" => leftValue / rightValue,
-                        _ => throw new InvalidOperationException($"Desteklenmeyen işlem: {op}")
-                    };
-                }
-                // String birleştirme kontrolü
-                else if (left is string leftStr || right is string rightStr)
-                {
-                    leftStr = left as string;
-                    rightStr = right as string;
-                    string result = (left is string ? leftStr : left.ToString()) + (right is string ? rightStr : right.ToString());
-                    return result; // String birleştirme
-                }
-                else
-                {
-                    throw new InvalidOperationException("Aritmetik işlemler veya string birleştirme için geçerli değerler tanımlı olmalıdır.");
-                }
+                throw new InvalidOperationException("Values must be defined for print operations.");
             }
 
-            // "yazdır" komutunda string ve int değerleri yan yana yazdırma
-            if (context.ChildCount == 3 && context.GetChild(0).GetText() == "yazdır")
-            {
-                var left = Visit(context.expression(1)); // İlk ifadeyi değerlendir
-                var right = Visit(context.expression(2)); // İkinci ifadeyi değerlendir
-
-                if (left == null || right == null)
-                {
-                    throw new InvalidOperationException("Yazdırma işlemi için değerler tanımlı olmalıdır.");
-                }
-
-                if (left is string str && right is double num)
-                {
-                    // string ve int'i birleştir
-                    return str + num.ToString(); // "Toplam: 12"
-                }
-
-                if (left is double numLeft && right is string strRight)
-                {
-                    // int ve string'i birleştir
-                    return numLeft.ToString() + strRight; // "12Toplam"
-                }
-
-                throw new InvalidOperationException("Aritmetik işlemler sadece sayılar ile yapılabilir.");
-            }
-
-            throw new NotImplementedException("İfade değerlendirme için tanımlı değil.");
+            return left.ToString() + right.ToString(); // Print concatenation
         }
 
         // Aritmetik işlem olup olmadığını kontrol eden yardımcı metod
-        private bool IsArithmeticOperator(string op)
+        private bool IsArithmeticOperator(string op) => op switch
         {
-            return op switch
-            {
-                "+" => true,
-                "-" => true,
-                "*" => true,
-                "/" => true,
-                _ => false
-            };
-        }
+            "+" => true,
+            "-" => true,
+            "*" => true,
+            "/" => true,
+            _ => false
+        };
 
         // Karşılaştırma işlemi olup olmadığını kontrol eden yardımcı metod
-        private bool IsComparisonOperator(string op)
+        private bool IsComparisonOperator(string op) => op switch
         {
-            return op switch
-            {
-                "==" => true,
-                "!=" => true,
-                ">" => true,
-                "<" => true,
-                ">=" => true,
-                "<=" => true,
-                _ => false
-            };
-        }
+            "==" => true,
+            "!=" => true,
+            ">" => true,
+            "<" => true,
+            ">=" => true,
+            "<=" => true,
+            _ => false
+        };
 
         public object VisitExpressionStatement([NotNull] ARPAParser.ExpressionStatementContext context)
         {
@@ -318,7 +327,7 @@ namespace ARPA_Programming_Language.Antlr4
                 }
 
                 // Hiçbir "değilseeğer" koşulu sağlanmazsa ve "değilse" bloğu varsa
-                if (!evaluated && context.DEĞİLSE() != null)
+                if (!evaluated && context.DEGILSE() != null)
                 {
                     Visit(context.block(context.block().Length - 1));
                 }
@@ -329,7 +338,8 @@ namespace ARPA_Programming_Language.Antlr4
         public object VisitPrintStatement([NotNull] ARPAParser.PrintStatementContext context)
         {
             var value = Visit(context.expression());
-            _output.AppendLine(value.ToString());
+            if (value != null)
+                _output.AppendLine(value.ToString());
             return null;
         }
 
@@ -400,22 +410,16 @@ namespace ARPA_Programming_Language.Antlr4
 
         public object VisitFunctionCall([NotNull] ARPAParser.FunctionCallContext context)
         {
-            string functionName = context.ID().GetText(); // Fonksiyon ismini al
-            var args = Visit(context.argList()) as List<object>; // Argüman listesini değerlendir
-
-            // Eğer argümanlar null ise boş bir dizi döndür
-            if (args == null)
+            var funcName = context.ID().GetText();
+            if (_functions.TryGetValue(funcName, out var func))
             {
-                args = new List<object>();
-            }
+                var args = Visit(context.argList()) as List<object>; // Argüman listesini değerlendir
+                if (args == null)
+                    args = new List<object>();
 
-            // Fonksiyonun var olup olmadığını kontrol et
-            if (_functions.TryGetValue(functionName, out var function))
-            {
                 try
                 {
-                    // Fonksiyonu argümanlarla çağır
-                    return function(args.ToArray());
+                    return func(args.ToArray()); // Call the function
                 }
                 catch (ReturnException returnEx)
                 {
@@ -423,8 +427,7 @@ namespace ARPA_Programming_Language.Antlr4
                     return returnEx.ReturnValue;
                 }
             }
-
-            throw new Exception($"Fonksiyon '{functionName}' bulunamadı."); // Hata fırlat
+            throw new InvalidOperationException($"Function not defined: {funcName}");
         }
 
         public object VisitArgList([NotNull] ARPAParser.ArgListContext context)
@@ -468,6 +471,39 @@ namespace ARPA_Programming_Language.Antlr4
         {
             object returnValue = context.expression() != null ? Visit(context.expression()) : null;
             throw new ReturnException(returnValue); // Return ifadesi için özel exception fırlat
+        }
+
+        public object VisitWhileLoopStatement([NotNull] ARPAParser.WhileLoopStatementContext context)
+        {
+            while ((bool)Visit(context.expression()))
+            {
+                Visit(context.block()); // Koşul sağlandığı sürece bloğu çalıştır
+            }
+            return null;
+        }
+
+        public object VisitForLoopStatement([NotNull] ARPAParser.ForLoopStatementContext context)
+        {
+            // For döngüsünün başlangıç durumu çalıştırılır (initializer)
+            if (context.variableDeclaration() != null)
+            {
+                Visit(context.variableDeclaration());
+            }
+
+            // Döngü koşul kontrolü
+            while (context.expression() == null || (bool)Visit(context.expression()))
+            {
+                // Döngü gövdesi
+                Visit(context.block());
+
+                // İterasyon kısmı (örneğin i++)
+                if (context.assignment() != null)
+                {
+                    Visit(context.assignment());
+                }
+            }
+
+            return null;
         }
     }
 }

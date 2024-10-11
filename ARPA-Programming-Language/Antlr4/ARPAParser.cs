@@ -36,40 +36,40 @@ public partial class ARPAParser : Parser {
 	protected static DFA[] decisionToDFA;
 	protected static PredictionContextCache sharedContextCache = new PredictionContextCache();
 	public const int
-		SOLPARANTEZ=1, SAĞPARANTEZ=2, SOLSÜSLÜPARANTEZ=3, SAĞSÜSLÜPARANTEZ=4, 
-		NOKTALIVİRGÜL=5, VİRGÜL=6, SAYI=7, METİN=8, ONDALIK=9, MANTIK=10, BOŞ=11, 
-		ARTI=12, EKSİ=13, ÇARPIM=14, BÖLÜ=15, MOD=16, ATAMA=17, AND=18, OR=19, 
-		EŞİT=20, EŞİTDEĞİL=21, BÜYÜK=22, KÜÇÜK=23, BÜYÜKEŞİT=24, KÜÇÜKEŞİT=25, 
-		EĞER=26, DEĞİLSEEĞER=27, DEĞİLSE=28, İÇİN=29, İKEN=30, YAZDIR=31, DÖNDÜR=32, 
-		ID=33, NUMBER=34, STRING=35, WS=36, COMMENT=37;
+		SOLPARANTEZ=1, SAGPARANTEZ=2, SOLSUSLUPARANTEZ=3, SAGSUSLUPARANTEZ=4, 
+		NOKTALIVIRGUL=5, VIRGUL=6, SAYI=7, METIN=8, ONDALIK=9, MANTIK=10, BOS=11, 
+		TRUE=12, FALSE=13, ARTI=14, EKSI=15, CARPIM=16, BOLU=17, MOD=18, ATAMA=19, 
+		VE=20, VEYA=21, ESIT=22, ESITDEGIL=23, BUYUK=24, KUCUK=25, BUYUKESIT=26, 
+		KUCUKESIT=27, EGER=28, DEGILSEEGER=29, DEGILSE=30, ICIN=31, IKEN=32, YAZDIR=33, 
+		DONDUR=34, ID=35, NUMBER=36, STRING=37, WS=38, COMMENT=39;
 	public const int
 		RULE_program = 0, RULE_statement = 1, RULE_declaration = 2, RULE_variableDeclaration = 3, 
 		RULE_functionDeclaration = 4, RULE_paramList = 5, RULE_assignment = 6, 
-		RULE_expressionStatement = 7, RULE_ifStatement = 8, RULE_printStatement = 9, 
-		RULE_block = 10, RULE_returnStatement = 11, RULE_expression = 12, RULE_functionCall = 13, 
-		RULE_argList = 14;
+		RULE_expressionStatement = 7, RULE_ifStatement = 8, RULE_whileLoopStatement = 9, 
+		RULE_forLoopStatement = 10, RULE_printStatement = 11, RULE_block = 12, 
+		RULE_returnStatement = 13, RULE_expression = 14, RULE_functionCall = 15, 
+		RULE_argList = 16;
 	public static readonly string[] ruleNames = {
 		"program", "statement", "declaration", "variableDeclaration", "functionDeclaration", 
-		"paramList", "assignment", "expressionStatement", "ifStatement", "printStatement", 
-		"block", "returnStatement", "expression", "functionCall", "argList"
+		"paramList", "assignment", "expressionStatement", "ifStatement", "whileLoopStatement", 
+		"forLoopStatement", "printStatement", "block", "returnStatement", "expression", 
+		"functionCall", "argList"
 	};
 
 	private static readonly string[] _LiteralNames = {
 		null, "'('", "')'", "'{'", "'}'", "';'", "','", "'sayi'", "'metin'", "'ondalik'", 
-		"'mantik'", "'bos'", "'+'", "'-'", "'*'", "'/'", "'%'", "'='", "'ve'", 
-		"'veya'", "'=='", "'!='", "'>'", "'<'", "'>='", "'<='", "'eger'", "'degilseeger'", 
-		"'degilse'", "'icin'", "'iken'", "'yazdir'", "'dondur'"
+		"'mantik'", "'bos'", "'dogru'", "'yanlis'", "'+'", "'-'", "'*'", "'/'", 
+		"'%'", "'='", "'ve'", "'veya'", "'=='", "'!='", "'>'", "'<'", "'>='", 
+		"'<='", "'eger'", "'degilseeger'", "'degilse'", "'icin'", "'iken'", "'yazdir'", 
+		"'dondur'"
 	};
 	private static readonly string[] _SymbolicNames = {
-		null, "SOLPARANTEZ", "SA\u0002PARANTEZ", "SOLS\u0004SL\u0007PARANTEZ", 
-		"SA\u0002S\u0004SL\u0007PARANTEZ", "NOKTALIV\u0008RG\u000BL", "V\u0001RG\u0004L", 
-		"SAYI", "MET\u0003N", "ONDALIK", "MANTIK", "BO\u0002", "ARTI", "EKS\u0003", 
-		"\u0000ARPIM", "B\u0001L\u0003", "MOD", "ATAMA", "AND", "OR", "E\u0001\u0002T", 
-		"E\u0001\u0002TDE\u0006\u0007L", "B\u0001Y\u0003K", "K\u0001\u0002\u0003K", 
-		"B\u0001Y\u0003KE\u0006\u0007T", "K\u0001\u0002\u0003KE\u0006\u0007T", 
-		"E\u0001ER", "DE\u0002\u0003LSEE\u0008ER", "DE\u0002\u0003LSE", "\u0000\u0001\u0002N", 
-		"\u0000KEN", "YAZDIR", "D\u0001ND\u0004R", "ID", "NUMBER", "STRING", "WS", 
-		"COMMENT"
+		null, "SOLPARANTEZ", "SAGPARANTEZ", "SOLSUSLUPARANTEZ", "SAGSUSLUPARANTEZ", 
+		"NOKTALIVIRGUL", "VIRGUL", "SAYI", "METIN", "ONDALIK", "MANTIK", "BOS", 
+		"TRUE", "FALSE", "ARTI", "EKSI", "CARPIM", "BOLU", "MOD", "ATAMA", "VE", 
+		"VEYA", "ESIT", "ESITDEGIL", "BUYUK", "KUCUK", "BUYUKESIT", "KUCUKESIT", 
+		"EGER", "DEGILSEEGER", "DEGILSE", "ICIN", "IKEN", "YAZDIR", "DONDUR", 
+		"ID", "NUMBER", "STRING", "WS", "COMMENT"
 	};
 	public static readonly IVocabulary DefaultVocabulary = new Vocabulary(_LiteralNames, _SymbolicNames);
 
@@ -141,17 +141,17 @@ public partial class ARPAParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 33;
+			State = 37;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 66639105930L) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 272998875018L) != 0)) {
 				{
 				{
-				State = 30;
+				State = 34;
 				statement();
 				}
 				}
-				State = 35;
+				State = 39;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
@@ -180,6 +180,12 @@ public partial class ARPAParser : Parser {
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public IfStatementContext ifStatement() {
 			return GetRuleContext<IfStatementContext>(0);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public WhileLoopStatementContext whileLoopStatement() {
+			return GetRuleContext<WhileLoopStatementContext>(0);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ForLoopStatementContext forLoopStatement() {
+			return GetRuleContext<ForLoopStatementContext>(0);
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public PrintStatementContext printStatement() {
 			return GetRuleContext<PrintStatementContext>(0);
@@ -221,62 +227,76 @@ public partial class ARPAParser : Parser {
 		StatementContext _localctx = new StatementContext(Context, State);
 		EnterRule(_localctx, 2, RULE_statement);
 		try {
-			State = 44;
+			State = 50;
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,1,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 36;
+				State = 40;
 				declaration();
 				}
 				break;
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 37;
+				State = 41;
 				assignment();
 				}
 				break;
 			case 3:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 38;
+				State = 42;
 				expressionStatement();
 				}
 				break;
 			case 4:
 				EnterOuterAlt(_localctx, 4);
 				{
-				State = 39;
+				State = 43;
 				ifStatement();
 				}
 				break;
 			case 5:
 				EnterOuterAlt(_localctx, 5);
 				{
-				State = 40;
-				printStatement();
+				State = 44;
+				whileLoopStatement();
 				}
 				break;
 			case 6:
 				EnterOuterAlt(_localctx, 6);
 				{
-				State = 41;
-				block();
+				State = 45;
+				forLoopStatement();
 				}
 				break;
 			case 7:
 				EnterOuterAlt(_localctx, 7);
 				{
-				State = 42;
-				functionCall();
+				State = 46;
+				printStatement();
 				}
 				break;
 			case 8:
 				EnterOuterAlt(_localctx, 8);
 				{
-				State = 43;
+				State = 47;
+				block();
+				}
+				break;
+			case 9:
+				EnterOuterAlt(_localctx, 9);
+				{
+				State = 48;
+				functionCall();
+				}
+				break;
+			case 10:
+				EnterOuterAlt(_localctx, 10);
+				{
+				State = 49;
 				returnStatement();
 				}
 				break;
@@ -328,20 +348,20 @@ public partial class ARPAParser : Parser {
 		DeclarationContext _localctx = new DeclarationContext(Context, State);
 		EnterRule(_localctx, 4, RULE_declaration);
 		try {
-			State = 48;
+			State = 54;
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,2,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 46;
+				State = 52;
 				variableDeclaration();
 				}
 				break;
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 47;
+				State = 53;
 				functionDeclaration();
 				}
 				break;
@@ -360,9 +380,9 @@ public partial class ARPAParser : Parser {
 
 	public partial class VariableDeclarationContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ID() { return GetToken(ARPAParser.ID, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NOKTALIVİRGÜL() { return GetToken(ARPAParser.NOKTALIVİRGÜL, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NOKTALIVIRGUL() { return GetToken(ARPAParser.NOKTALIVIRGUL, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SAYI() { return GetToken(ARPAParser.SAYI, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode METİN() { return GetToken(ARPAParser.METİN, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode METIN() { return GetToken(ARPAParser.METIN, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ONDALIK() { return GetToken(ARPAParser.ONDALIK, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode MANTIK() { return GetToken(ARPAParser.MANTIK, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ATAMA() { return GetToken(ARPAParser.ATAMA, 0); }
@@ -400,7 +420,7 @@ public partial class ARPAParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 50;
+			State = 56;
 			_la = TokenStream.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 1920L) != 0)) ) {
 			ErrorHandler.RecoverInline(this);
@@ -409,22 +429,22 @@ public partial class ARPAParser : Parser {
 				ErrorHandler.ReportMatch(this);
 			    Consume();
 			}
-			State = 51;
+			State = 57;
 			Match(ID);
-			State = 54;
+			State = 60;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==ATAMA) {
 				{
-				State = 52;
+				State = 58;
 				Match(ATAMA);
-				State = 53;
+				State = 59;
 				expression(0);
 				}
 			}
 
-			State = 56;
-			Match(NOKTALIVİRGÜL);
+			State = 62;
+			Match(NOKTALIVIRGUL);
 			}
 		}
 		catch (RecognitionException re) {
@@ -441,15 +461,15 @@ public partial class ARPAParser : Parser {
 	public partial class FunctionDeclarationContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ID() { return GetToken(ARPAParser.ID, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SOLPARANTEZ() { return GetToken(ARPAParser.SOLPARANTEZ, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SAĞPARANTEZ() { return GetToken(ARPAParser.SAĞPARANTEZ, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SAGPARANTEZ() { return GetToken(ARPAParser.SAGPARANTEZ, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public BlockContext block() {
 			return GetRuleContext<BlockContext>(0);
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SAYI() { return GetToken(ARPAParser.SAYI, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode METİN() { return GetToken(ARPAParser.METİN, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode METIN() { return GetToken(ARPAParser.METIN, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ONDALIK() { return GetToken(ARPAParser.ONDALIK, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode MANTIK() { return GetToken(ARPAParser.MANTIK, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode BOŞ() { return GetToken(ARPAParser.BOŞ, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode BOS() { return GetToken(ARPAParser.BOS, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ParamListContext paramList() {
 			return GetRuleContext<ParamListContext>(0);
 		}
@@ -484,7 +504,7 @@ public partial class ARPAParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 58;
+			State = 64;
 			_la = TokenStream.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 3968L) != 0)) ) {
 			ErrorHandler.RecoverInline(this);
@@ -493,23 +513,23 @@ public partial class ARPAParser : Parser {
 				ErrorHandler.ReportMatch(this);
 			    Consume();
 			}
-			State = 59;
+			State = 65;
 			Match(ID);
-			State = 60;
+			State = 66;
 			Match(SOLPARANTEZ);
-			State = 62;
+			State = 68;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==ID) {
 				{
-				State = 61;
+				State = 67;
 				paramList();
 				}
 			}
 
-			State = 64;
-			Match(SAĞPARANTEZ);
-			State = 65;
+			State = 70;
+			Match(SAGPARANTEZ);
+			State = 71;
 			block();
 			}
 		}
@@ -529,9 +549,9 @@ public partial class ARPAParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ID(int i) {
 			return GetToken(ARPAParser.ID, i);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] VİRGÜL() { return GetTokens(ARPAParser.VİRGÜL); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode VİRGÜL(int i) {
-			return GetToken(ARPAParser.VİRGÜL, i);
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] VIRGUL() { return GetTokens(ARPAParser.VIRGUL); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode VIRGUL(int i) {
+			return GetToken(ARPAParser.VIRGUL, i);
 		}
 		public ParamListContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
@@ -564,21 +584,21 @@ public partial class ARPAParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 67;
+			State = 73;
 			Match(ID);
-			State = 72;
+			State = 78;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			while (_la==VİRGÜL) {
+			while (_la==VIRGUL) {
 				{
 				{
-				State = 68;
-				Match(VİRGÜL);
-				State = 69;
+				State = 74;
+				Match(VIRGUL);
+				State = 75;
 				Match(ID);
 				}
 				}
-				State = 74;
+				State = 80;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
@@ -601,7 +621,7 @@ public partial class ARPAParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression() {
 			return GetRuleContext<ExpressionContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NOKTALIVİRGÜL() { return GetToken(ARPAParser.NOKTALIVİRGÜL, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NOKTALIVIRGUL() { return GetToken(ARPAParser.NOKTALIVIRGUL, 0); }
 		public AssignmentContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
@@ -632,14 +652,14 @@ public partial class ARPAParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 75;
+			State = 81;
 			Match(ID);
-			State = 76;
+			State = 82;
 			Match(ATAMA);
-			State = 77;
+			State = 83;
 			expression(0);
-			State = 78;
-			Match(NOKTALIVİRGÜL);
+			State = 84;
+			Match(NOKTALIVIRGUL);
 			}
 		}
 		catch (RecognitionException re) {
@@ -657,7 +677,7 @@ public partial class ARPAParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression() {
 			return GetRuleContext<ExpressionContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NOKTALIVİRGÜL() { return GetToken(ARPAParser.NOKTALIVİRGÜL, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NOKTALIVIRGUL() { return GetToken(ARPAParser.NOKTALIVIRGUL, 0); }
 		public ExpressionStatementContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
@@ -688,10 +708,10 @@ public partial class ARPAParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 80;
+			State = 86;
 			expression(0);
-			State = 81;
-			Match(NOKTALIVİRGÜL);
+			State = 87;
+			Match(NOKTALIVIRGUL);
 			}
 		}
 		catch (RecognitionException re) {
@@ -706,7 +726,7 @@ public partial class ARPAParser : Parser {
 	}
 
 	public partial class IfStatementContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode EĞER() { return GetToken(ARPAParser.EĞER, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode EGER() { return GetToken(ARPAParser.EGER, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] SOLPARANTEZ() { return GetTokens(ARPAParser.SOLPARANTEZ); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SOLPARANTEZ(int i) {
 			return GetToken(ARPAParser.SOLPARANTEZ, i);
@@ -717,9 +737,9 @@ public partial class ARPAParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression(int i) {
 			return GetRuleContext<ExpressionContext>(i);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] SAĞPARANTEZ() { return GetTokens(ARPAParser.SAĞPARANTEZ); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SAĞPARANTEZ(int i) {
-			return GetToken(ARPAParser.SAĞPARANTEZ, i);
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] SAGPARANTEZ() { return GetTokens(ARPAParser.SAGPARANTEZ); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SAGPARANTEZ(int i) {
+			return GetToken(ARPAParser.SAGPARANTEZ, i);
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public BlockContext[] block() {
 			return GetRuleContexts<BlockContext>();
@@ -727,8 +747,8 @@ public partial class ARPAParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public BlockContext block(int i) {
 			return GetRuleContext<BlockContext>(i);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode DEĞİLSEEĞER() { return GetToken(ARPAParser.DEĞİLSEEĞER, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode DEĞİLSE() { return GetToken(ARPAParser.DEĞİLSE, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode DEGILSEEGER() { return GetToken(ARPAParser.DEGILSEEGER, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode DEGILSE() { return GetToken(ARPAParser.DEGILSE, 0); }
 		public IfStatementContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
@@ -760,46 +780,210 @@ public partial class ARPAParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 83;
-			Match(EĞER);
-			State = 84;
+			State = 89;
+			Match(EGER);
+			State = 90;
 			Match(SOLPARANTEZ);
-			State = 85;
+			State = 91;
 			expression(0);
-			State = 86;
-			Match(SAĞPARANTEZ);
-			State = 87;
+			State = 92;
+			Match(SAGPARANTEZ);
+			State = 93;
 			block();
-			State = 94;
+			State = 100;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			if (_la==DEĞİLSEEĞER) {
+			if (_la==DEGILSEEGER) {
 				{
-				State = 88;
-				Match(DEĞİLSEEĞER);
-				State = 89;
+				State = 94;
+				Match(DEGILSEEGER);
+				State = 95;
 				Match(SOLPARANTEZ);
-				State = 90;
+				State = 96;
 				expression(0);
-				State = 91;
-				Match(SAĞPARANTEZ);
-				State = 92;
+				State = 97;
+				Match(SAGPARANTEZ);
+				State = 98;
 				block();
 				}
 			}
 
-			State = 98;
+			State = 104;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			if (_la==DEĞİLSE) {
+			if (_la==DEGILSE) {
 				{
-				State = 96;
-				Match(DEĞİLSE);
-				State = 97;
+				State = 102;
+				Match(DEGILSE);
+				State = 103;
 				block();
 				}
 			}
 
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class WhileLoopStatementContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode IKEN() { return GetToken(ARPAParser.IKEN, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SOLPARANTEZ() { return GetToken(ARPAParser.SOLPARANTEZ, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression() {
+			return GetRuleContext<ExpressionContext>(0);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SAGPARANTEZ() { return GetToken(ARPAParser.SAGPARANTEZ, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public BlockContext block() {
+			return GetRuleContext<BlockContext>(0);
+		}
+		public WhileLoopStatementContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_whileLoopStatement; } }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void EnterRule(IParseTreeListener listener) {
+			IARPAListener typedListener = listener as IARPAListener;
+			if (typedListener != null) typedListener.EnterWhileLoopStatement(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void ExitRule(IParseTreeListener listener) {
+			IARPAListener typedListener = listener as IARPAListener;
+			if (typedListener != null) typedListener.ExitWhileLoopStatement(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IARPAVisitor<TResult> typedVisitor = visitor as IARPAVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitWhileLoopStatement(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public WhileLoopStatementContext whileLoopStatement() {
+		WhileLoopStatementContext _localctx = new WhileLoopStatementContext(Context, State);
+		EnterRule(_localctx, 18, RULE_whileLoopStatement);
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 106;
+			Match(IKEN);
+			State = 107;
+			Match(SOLPARANTEZ);
+			State = 108;
+			expression(0);
+			State = 109;
+			Match(SAGPARANTEZ);
+			State = 110;
+			block();
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class ForLoopStatementContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ICIN() { return GetToken(ARPAParser.ICIN, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SOLPARANTEZ() { return GetToken(ARPAParser.SOLPARANTEZ, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NOKTALIVIRGUL() { return GetToken(ARPAParser.NOKTALIVIRGUL, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SAGPARANTEZ() { return GetToken(ARPAParser.SAGPARANTEZ, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public BlockContext block() {
+			return GetRuleContext<BlockContext>(0);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public VariableDeclarationContext variableDeclaration() {
+			return GetRuleContext<VariableDeclarationContext>(0);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression() {
+			return GetRuleContext<ExpressionContext>(0);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public AssignmentContext assignment() {
+			return GetRuleContext<AssignmentContext>(0);
+		}
+		public ForLoopStatementContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_forLoopStatement; } }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void EnterRule(IParseTreeListener listener) {
+			IARPAListener typedListener = listener as IARPAListener;
+			if (typedListener != null) typedListener.EnterForLoopStatement(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void ExitRule(IParseTreeListener listener) {
+			IARPAListener typedListener = listener as IARPAListener;
+			if (typedListener != null) typedListener.ExitForLoopStatement(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IARPAVisitor<TResult> typedVisitor = visitor as IARPAVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitForLoopStatement(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public ForLoopStatementContext forLoopStatement() {
+		ForLoopStatementContext _localctx = new ForLoopStatementContext(Context, State);
+		EnterRule(_localctx, 20, RULE_forLoopStatement);
+		int _la;
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 112;
+			Match(ICIN);
+			State = 113;
+			Match(SOLPARANTEZ);
+			State = 115;
+			ErrorHandler.Sync(this);
+			_la = TokenStream.LA(1);
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 1920L) != 0)) {
+				{
+				State = 114;
+				variableDeclaration();
+				}
+			}
+
+			State = 118;
+			ErrorHandler.Sync(this);
+			_la = TokenStream.LA(1);
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 240518180866L) != 0)) {
+				{
+				State = 117;
+				expression(0);
+				}
+			}
+
+			State = 120;
+			Match(NOKTALIVIRGUL);
+			State = 122;
+			ErrorHandler.Sync(this);
+			_la = TokenStream.LA(1);
+			if (_la==ID) {
+				{
+				State = 121;
+				assignment();
+				}
+			}
+
+			State = 124;
+			Match(SAGPARANTEZ);
+			State = 125;
+			block();
 			}
 		}
 		catch (RecognitionException re) {
@@ -819,8 +1003,8 @@ public partial class ARPAParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression() {
 			return GetRuleContext<ExpressionContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SAĞPARANTEZ() { return GetToken(ARPAParser.SAĞPARANTEZ, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NOKTALIVİRGÜL() { return GetToken(ARPAParser.NOKTALIVİRGÜL, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SAGPARANTEZ() { return GetToken(ARPAParser.SAGPARANTEZ, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NOKTALIVIRGUL() { return GetToken(ARPAParser.NOKTALIVIRGUL, 0); }
 		public PrintStatementContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
@@ -847,20 +1031,20 @@ public partial class ARPAParser : Parser {
 	[RuleVersion(0)]
 	public PrintStatementContext printStatement() {
 		PrintStatementContext _localctx = new PrintStatementContext(Context, State);
-		EnterRule(_localctx, 18, RULE_printStatement);
+		EnterRule(_localctx, 22, RULE_printStatement);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 100;
+			State = 127;
 			Match(YAZDIR);
-			State = 101;
+			State = 128;
 			Match(SOLPARANTEZ);
-			State = 102;
+			State = 129;
 			expression(0);
-			State = 103;
-			Match(SAĞPARANTEZ);
-			State = 104;
-			Match(NOKTALIVİRGÜL);
+			State = 130;
+			Match(SAGPARANTEZ);
+			State = 131;
+			Match(NOKTALIVIRGUL);
 			}
 		}
 		catch (RecognitionException re) {
@@ -875,8 +1059,8 @@ public partial class ARPAParser : Parser {
 	}
 
 	public partial class BlockContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SOLSÜSLÜPARANTEZ() { return GetToken(ARPAParser.SOLSÜSLÜPARANTEZ, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SAĞSÜSLÜPARANTEZ() { return GetToken(ARPAParser.SAĞSÜSLÜPARANTEZ, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SOLSUSLUPARANTEZ() { return GetToken(ARPAParser.SOLSUSLUPARANTEZ, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SAGSUSLUPARANTEZ() { return GetToken(ARPAParser.SAGSUSLUPARANTEZ, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public StatementContext[] statement() {
 			return GetRuleContexts<StatementContext>();
 		}
@@ -909,29 +1093,29 @@ public partial class ARPAParser : Parser {
 	[RuleVersion(0)]
 	public BlockContext block() {
 		BlockContext _localctx = new BlockContext(Context, State);
-		EnterRule(_localctx, 20, RULE_block);
+		EnterRule(_localctx, 24, RULE_block);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 106;
-			Match(SOLSÜSLÜPARANTEZ);
-			State = 110;
+			State = 133;
+			Match(SOLSUSLUPARANTEZ);
+			State = 137;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 66639105930L) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 272998875018L) != 0)) {
 				{
 				{
-				State = 107;
+				State = 134;
 				statement();
 				}
 				}
-				State = 112;
+				State = 139;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
-			State = 113;
-			Match(SAĞSÜSLÜPARANTEZ);
+			State = 140;
+			Match(SAGSUSLUPARANTEZ);
 			}
 		}
 		catch (RecognitionException re) {
@@ -946,11 +1130,11 @@ public partial class ARPAParser : Parser {
 	}
 
 	public partial class ReturnStatementContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode DÖNDÜR() { return GetToken(ARPAParser.DÖNDÜR, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode DONDUR() { return GetToken(ARPAParser.DONDUR, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NOKTALIVIRGUL() { return GetToken(ARPAParser.NOKTALIVIRGUL, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression() {
 			return GetRuleContext<ExpressionContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NOKTALIVİRGÜL() { return GetToken(ARPAParser.NOKTALIVİRGÜL, 0); }
 		public ReturnStatementContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
@@ -977,16 +1161,25 @@ public partial class ARPAParser : Parser {
 	[RuleVersion(0)]
 	public ReturnStatementContext returnStatement() {
 		ReturnStatementContext _localctx = new ReturnStatementContext(Context, State);
-		EnterRule(_localctx, 22, RULE_returnStatement);
+		EnterRule(_localctx, 26, RULE_returnStatement);
+		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 115;
-			Match(DÖNDÜR);
-			State = 116;
-			expression(0);
-			State = 117;
-			Match(NOKTALIVİRGÜL);
+			State = 142;
+			Match(DONDUR);
+			State = 144;
+			ErrorHandler.Sync(this);
+			_la = TokenStream.LA(1);
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 240518180866L) != 0)) {
+				{
+				State = 143;
+				expression(0);
+				}
+			}
+
+			State = 146;
+			Match(NOKTALIVIRGUL);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1004,7 +1197,8 @@ public partial class ARPAParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ID() { return GetToken(ARPAParser.ID, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NUMBER() { return GetToken(ARPAParser.NUMBER, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode STRING() { return GetToken(ARPAParser.STRING, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode MANTIK() { return GetToken(ARPAParser.MANTIK, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode TRUE() { return GetToken(ARPAParser.TRUE, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode FALSE() { return GetToken(ARPAParser.FALSE, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public FunctionCallContext functionCall() {
 			return GetRuleContext<FunctionCallContext>(0);
 		}
@@ -1015,18 +1209,20 @@ public partial class ARPAParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression(int i) {
 			return GetRuleContext<ExpressionContext>(i);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SAĞPARANTEZ() { return GetToken(ARPAParser.SAĞPARANTEZ, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SAGPARANTEZ() { return GetToken(ARPAParser.SAGPARANTEZ, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode VEYA() { return GetToken(ARPAParser.VEYA, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode VE() { return GetToken(ARPAParser.VE, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ESIT() { return GetToken(ARPAParser.ESIT, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ESITDEGIL() { return GetToken(ARPAParser.ESITDEGIL, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode BUYUK() { return GetToken(ARPAParser.BUYUK, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode KUCUK() { return GetToken(ARPAParser.KUCUK, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode BUYUKESIT() { return GetToken(ARPAParser.BUYUKESIT, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode KUCUKESIT() { return GetToken(ARPAParser.KUCUKESIT, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ARTI() { return GetToken(ARPAParser.ARTI, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode EKSİ() { return GetToken(ARPAParser.EKSİ, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ÇARPIM() { return GetToken(ARPAParser.ÇARPIM, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode BÖLÜ() { return GetToken(ARPAParser.BÖLÜ, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode EKSI() { return GetToken(ARPAParser.EKSI, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode CARPIM() { return GetToken(ARPAParser.CARPIM, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode BOLU() { return GetToken(ARPAParser.BOLU, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode MOD() { return GetToken(ARPAParser.MOD, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode EŞİT() { return GetToken(ARPAParser.EŞİT, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode EŞİTDEĞİL() { return GetToken(ARPAParser.EŞİTDEĞİL, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode BÜYÜK() { return GetToken(ARPAParser.BÜYÜK, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode KÜÇÜK() { return GetToken(ARPAParser.KÜÇÜK, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode BÜYÜKEŞİT() { return GetToken(ARPAParser.BÜYÜKEŞİT, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode KÜÇÜKEŞİT() { return GetToken(ARPAParser.KÜÇÜKEŞİT, 0); }
 		public ExpressionContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
@@ -1060,114 +1256,163 @@ public partial class ARPAParser : Parser {
 		int _parentState = State;
 		ExpressionContext _localctx = new ExpressionContext(Context, _parentState);
 		ExpressionContext _prevctx = _localctx;
-		int _startState = 24;
-		EnterRecursionRule(_localctx, 24, RULE_expression, _p);
+		int _startState = 28;
+		EnterRecursionRule(_localctx, 28, RULE_expression, _p);
 		int _la;
 		try {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 129;
+			State = 159;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,9,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,13,Context) ) {
 			case 1:
 				{
-				State = 120;
+				State = 149;
 				Match(ID);
 				}
 				break;
 			case 2:
 				{
-				State = 121;
+				State = 150;
 				Match(NUMBER);
 				}
 				break;
 			case 3:
 				{
-				State = 122;
+				State = 151;
 				Match(STRING);
 				}
 				break;
 			case 4:
 				{
-				State = 123;
-				Match(MANTIK);
+				State = 152;
+				Match(TRUE);
 				}
 				break;
 			case 5:
 				{
-				State = 124;
-				functionCall();
+				State = 153;
+				Match(FALSE);
 				}
 				break;
 			case 6:
 				{
-				State = 125;
+				State = 154;
+				functionCall();
+				}
+				break;
+			case 7:
+				{
+				State = 155;
 				Match(SOLPARANTEZ);
-				State = 126;
+				State = 156;
 				expression(0);
-				State = 127;
-				Match(SAĞPARANTEZ);
+				State = 157;
+				Match(SAGPARANTEZ);
 				}
 				break;
 			}
 			Context.Stop = TokenStream.LT(-1);
-			State = 139;
+			State = 178;
 			ErrorHandler.Sync(this);
-			_alt = Interpreter.AdaptivePredict(TokenStream,11,Context);
+			_alt = Interpreter.AdaptivePredict(TokenStream,15,Context);
 			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					if ( ParseListeners!=null )
 						TriggerExitRuleEvent();
 					_prevctx = _localctx;
 					{
-					State = 137;
+					State = 176;
 					ErrorHandler.Sync(this);
-					switch ( Interpreter.AdaptivePredict(TokenStream,10,Context) ) {
+					switch ( Interpreter.AdaptivePredict(TokenStream,14,Context) ) {
 					case 1:
 						{
 						_localctx = new ExpressionContext(_parentctx, _parentState);
 						PushNewRecursionContext(_localctx, _startState, RULE_expression);
-						State = 131;
-						if (!(Precpred(Context, 8))) throw new FailedPredicateException(this, "Precpred(Context, 8)");
-						State = 132;
-						_la = TokenStream.LA(1);
-						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 126976L) != 0)) ) {
-						ErrorHandler.RecoverInline(this);
-						}
-						else {
-							ErrorHandler.ReportMatch(this);
-						    Consume();
-						}
-						State = 133;
-						expression(9);
+						State = 161;
+						if (!(Precpred(Context, 12))) throw new FailedPredicateException(this, "Precpred(Context, 12)");
+						State = 162;
+						Match(VEYA);
+						State = 163;
+						expression(13);
 						}
 						break;
 					case 2:
 						{
 						_localctx = new ExpressionContext(_parentctx, _parentState);
 						PushNewRecursionContext(_localctx, _startState, RULE_expression);
-						State = 134;
-						if (!(Precpred(Context, 7))) throw new FailedPredicateException(this, "Precpred(Context, 7)");
-						State = 135;
+						State = 164;
+						if (!(Precpred(Context, 11))) throw new FailedPredicateException(this, "Precpred(Context, 11)");
+						State = 165;
+						Match(VE);
+						State = 166;
+						expression(12);
+						}
+						break;
+					case 3:
+						{
+						_localctx = new ExpressionContext(_parentctx, _parentState);
+						PushNewRecursionContext(_localctx, _startState, RULE_expression);
+						State = 167;
+						if (!(Precpred(Context, 10))) throw new FailedPredicateException(this, "Precpred(Context, 10)");
+						State = 168;
 						_la = TokenStream.LA(1);
-						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 66060288L) != 0)) ) {
+						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 264241152L) != 0)) ) {
 						ErrorHandler.RecoverInline(this);
 						}
 						else {
 							ErrorHandler.ReportMatch(this);
 						    Consume();
 						}
-						State = 136;
-						expression(8);
+						State = 169;
+						expression(11);
+						}
+						break;
+					case 4:
+						{
+						_localctx = new ExpressionContext(_parentctx, _parentState);
+						PushNewRecursionContext(_localctx, _startState, RULE_expression);
+						State = 170;
+						if (!(Precpred(Context, 9))) throw new FailedPredicateException(this, "Precpred(Context, 9)");
+						State = 171;
+						_la = TokenStream.LA(1);
+						if ( !(_la==ARTI || _la==EKSI) ) {
+						ErrorHandler.RecoverInline(this);
+						}
+						else {
+							ErrorHandler.ReportMatch(this);
+						    Consume();
+						}
+						State = 172;
+						expression(10);
+						}
+						break;
+					case 5:
+						{
+						_localctx = new ExpressionContext(_parentctx, _parentState);
+						PushNewRecursionContext(_localctx, _startState, RULE_expression);
+						State = 173;
+						if (!(Precpred(Context, 8))) throw new FailedPredicateException(this, "Precpred(Context, 8)");
+						State = 174;
+						_la = TokenStream.LA(1);
+						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 458752L) != 0)) ) {
+						ErrorHandler.RecoverInline(this);
+						}
+						else {
+							ErrorHandler.ReportMatch(this);
+						    Consume();
+						}
+						State = 175;
+						expression(9);
 						}
 						break;
 					}
 					} 
 				}
-				State = 141;
+				State = 180;
 				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,11,Context);
+				_alt = Interpreter.AdaptivePredict(TokenStream,15,Context);
 			}
 			}
 		}
@@ -1185,7 +1430,7 @@ public partial class ARPAParser : Parser {
 	public partial class FunctionCallContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ID() { return GetToken(ARPAParser.ID, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SOLPARANTEZ() { return GetToken(ARPAParser.SOLPARANTEZ, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SAĞPARANTEZ() { return GetToken(ARPAParser.SAĞPARANTEZ, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SAGPARANTEZ() { return GetToken(ARPAParser.SAGPARANTEZ, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ArgListContext argList() {
 			return GetRuleContext<ArgListContext>(0);
 		}
@@ -1215,27 +1460,27 @@ public partial class ARPAParser : Parser {
 	[RuleVersion(0)]
 	public FunctionCallContext functionCall() {
 		FunctionCallContext _localctx = new FunctionCallContext(Context, State);
-		EnterRule(_localctx, 26, RULE_functionCall);
+		EnterRule(_localctx, 30, RULE_functionCall);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 142;
+			State = 181;
 			Match(ID);
-			State = 143;
+			State = 182;
 			Match(SOLPARANTEZ);
-			State = 145;
+			State = 184;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 60129543170L) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 240518180866L) != 0)) {
 				{
-				State = 144;
+				State = 183;
 				argList();
 				}
 			}
 
-			State = 147;
-			Match(SAĞPARANTEZ);
+			State = 186;
+			Match(SAGPARANTEZ);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1256,9 +1501,9 @@ public partial class ARPAParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression(int i) {
 			return GetRuleContext<ExpressionContext>(i);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] VİRGÜL() { return GetTokens(ARPAParser.VİRGÜL); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode VİRGÜL(int i) {
-			return GetToken(ARPAParser.VİRGÜL, i);
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] VIRGUL() { return GetTokens(ARPAParser.VIRGUL); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode VIRGUL(int i) {
+			return GetToken(ARPAParser.VIRGUL, i);
 		}
 		public ArgListContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
@@ -1286,26 +1531,26 @@ public partial class ARPAParser : Parser {
 	[RuleVersion(0)]
 	public ArgListContext argList() {
 		ArgListContext _localctx = new ArgListContext(Context, State);
-		EnterRule(_localctx, 28, RULE_argList);
+		EnterRule(_localctx, 32, RULE_argList);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 149;
+			State = 188;
 			expression(0);
-			State = 154;
+			State = 193;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			while (_la==VİRGÜL) {
+			while (_la==VIRGUL) {
 				{
 				{
-				State = 150;
-				Match(VİRGÜL);
-				State = 151;
+				State = 189;
+				Match(VIRGUL);
+				State = 190;
 				expression(0);
 				}
 				}
-				State = 156;
+				State = 195;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
@@ -1324,68 +1569,86 @@ public partial class ARPAParser : Parser {
 
 	public override bool Sempred(RuleContext _localctx, int ruleIndex, int predIndex) {
 		switch (ruleIndex) {
-		case 12: return expression_sempred((ExpressionContext)_localctx, predIndex);
+		case 14: return expression_sempred((ExpressionContext)_localctx, predIndex);
 		}
 		return true;
 	}
 	private bool expression_sempred(ExpressionContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 0: return Precpred(Context, 8);
-		case 1: return Precpred(Context, 7);
+		case 0: return Precpred(Context, 12);
+		case 1: return Precpred(Context, 11);
+		case 2: return Precpred(Context, 10);
+		case 3: return Precpred(Context, 9);
+		case 4: return Precpred(Context, 8);
 		}
 		return true;
 	}
 
 	private static int[] _serializedATN = {
-		4,1,37,158,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,
+		4,1,39,197,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,
 		7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,2,14,7,14,
-		1,0,5,0,32,8,0,10,0,12,0,35,9,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,45,
-		8,1,1,2,1,2,3,2,49,8,2,1,3,1,3,1,3,1,3,3,3,55,8,3,1,3,1,3,1,4,1,4,1,4,
-		1,4,3,4,63,8,4,1,4,1,4,1,4,1,5,1,5,1,5,5,5,71,8,5,10,5,12,5,74,9,5,1,6,
-		1,6,1,6,1,6,1,6,1,7,1,7,1,7,1,8,1,8,1,8,1,8,1,8,1,8,1,8,1,8,1,8,1,8,1,
-		8,3,8,95,8,8,1,8,1,8,3,8,99,8,8,1,9,1,9,1,9,1,9,1,9,1,9,1,10,1,10,5,10,
-		109,8,10,10,10,12,10,112,9,10,1,10,1,10,1,11,1,11,1,11,1,11,1,12,1,12,
-		1,12,1,12,1,12,1,12,1,12,1,12,1,12,1,12,3,12,130,8,12,1,12,1,12,1,12,1,
-		12,1,12,1,12,5,12,138,8,12,10,12,12,12,141,9,12,1,13,1,13,1,13,3,13,146,
-		8,13,1,13,1,13,1,14,1,14,1,14,5,14,153,8,14,10,14,12,14,156,9,14,1,14,
-		0,1,24,15,0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,0,4,1,0,7,10,1,0,7,11,
-		1,0,12,16,1,0,20,25,166,0,33,1,0,0,0,2,44,1,0,0,0,4,48,1,0,0,0,6,50,1,
-		0,0,0,8,58,1,0,0,0,10,67,1,0,0,0,12,75,1,0,0,0,14,80,1,0,0,0,16,83,1,0,
-		0,0,18,100,1,0,0,0,20,106,1,0,0,0,22,115,1,0,0,0,24,129,1,0,0,0,26,142,
-		1,0,0,0,28,149,1,0,0,0,30,32,3,2,1,0,31,30,1,0,0,0,32,35,1,0,0,0,33,31,
-		1,0,0,0,33,34,1,0,0,0,34,1,1,0,0,0,35,33,1,0,0,0,36,45,3,4,2,0,37,45,3,
-		12,6,0,38,45,3,14,7,0,39,45,3,16,8,0,40,45,3,18,9,0,41,45,3,20,10,0,42,
-		45,3,26,13,0,43,45,3,22,11,0,44,36,1,0,0,0,44,37,1,0,0,0,44,38,1,0,0,0,
-		44,39,1,0,0,0,44,40,1,0,0,0,44,41,1,0,0,0,44,42,1,0,0,0,44,43,1,0,0,0,
-		45,3,1,0,0,0,46,49,3,6,3,0,47,49,3,8,4,0,48,46,1,0,0,0,48,47,1,0,0,0,49,
-		5,1,0,0,0,50,51,7,0,0,0,51,54,5,33,0,0,52,53,5,17,0,0,53,55,3,24,12,0,
-		54,52,1,0,0,0,54,55,1,0,0,0,55,56,1,0,0,0,56,57,5,5,0,0,57,7,1,0,0,0,58,
-		59,7,1,0,0,59,60,5,33,0,0,60,62,5,1,0,0,61,63,3,10,5,0,62,61,1,0,0,0,62,
-		63,1,0,0,0,63,64,1,0,0,0,64,65,5,2,0,0,65,66,3,20,10,0,66,9,1,0,0,0,67,
-		72,5,33,0,0,68,69,5,6,0,0,69,71,5,33,0,0,70,68,1,0,0,0,71,74,1,0,0,0,72,
-		70,1,0,0,0,72,73,1,0,0,0,73,11,1,0,0,0,74,72,1,0,0,0,75,76,5,33,0,0,76,
-		77,5,17,0,0,77,78,3,24,12,0,78,79,5,5,0,0,79,13,1,0,0,0,80,81,3,24,12,
-		0,81,82,5,5,0,0,82,15,1,0,0,0,83,84,5,26,0,0,84,85,5,1,0,0,85,86,3,24,
-		12,0,86,87,5,2,0,0,87,94,3,20,10,0,88,89,5,27,0,0,89,90,5,1,0,0,90,91,
-		3,24,12,0,91,92,5,2,0,0,92,93,3,20,10,0,93,95,1,0,0,0,94,88,1,0,0,0,94,
-		95,1,0,0,0,95,98,1,0,0,0,96,97,5,28,0,0,97,99,3,20,10,0,98,96,1,0,0,0,
-		98,99,1,0,0,0,99,17,1,0,0,0,100,101,5,31,0,0,101,102,5,1,0,0,102,103,3,
-		24,12,0,103,104,5,2,0,0,104,105,5,5,0,0,105,19,1,0,0,0,106,110,5,3,0,0,
-		107,109,3,2,1,0,108,107,1,0,0,0,109,112,1,0,0,0,110,108,1,0,0,0,110,111,
-		1,0,0,0,111,113,1,0,0,0,112,110,1,0,0,0,113,114,5,4,0,0,114,21,1,0,0,0,
-		115,116,5,32,0,0,116,117,3,24,12,0,117,118,5,5,0,0,118,23,1,0,0,0,119,
-		120,6,12,-1,0,120,130,5,33,0,0,121,130,5,34,0,0,122,130,5,35,0,0,123,130,
-		5,10,0,0,124,130,3,26,13,0,125,126,5,1,0,0,126,127,3,24,12,0,127,128,5,
-		2,0,0,128,130,1,0,0,0,129,119,1,0,0,0,129,121,1,0,0,0,129,122,1,0,0,0,
-		129,123,1,0,0,0,129,124,1,0,0,0,129,125,1,0,0,0,130,139,1,0,0,0,131,132,
-		10,8,0,0,132,133,7,2,0,0,133,138,3,24,12,9,134,135,10,7,0,0,135,136,7,
-		3,0,0,136,138,3,24,12,8,137,131,1,0,0,0,137,134,1,0,0,0,138,141,1,0,0,
-		0,139,137,1,0,0,0,139,140,1,0,0,0,140,25,1,0,0,0,141,139,1,0,0,0,142,143,
-		5,33,0,0,143,145,5,1,0,0,144,146,3,28,14,0,145,144,1,0,0,0,145,146,1,0,
-		0,0,146,147,1,0,0,0,147,148,5,2,0,0,148,27,1,0,0,0,149,154,3,24,12,0,150,
-		151,5,6,0,0,151,153,3,24,12,0,152,150,1,0,0,0,153,156,1,0,0,0,154,152,
-		1,0,0,0,154,155,1,0,0,0,155,29,1,0,0,0,156,154,1,0,0,0,14,33,44,48,54,
-		62,72,94,98,110,129,137,139,145,154
+		2,15,7,15,2,16,7,16,1,0,5,0,36,8,0,10,0,12,0,39,9,0,1,1,1,1,1,1,1,1,1,
+		1,1,1,1,1,1,1,1,1,1,1,3,1,51,8,1,1,2,1,2,3,2,55,8,2,1,3,1,3,1,3,1,3,3,
+		3,61,8,3,1,3,1,3,1,4,1,4,1,4,1,4,3,4,69,8,4,1,4,1,4,1,4,1,5,1,5,1,5,5,
+		5,77,8,5,10,5,12,5,80,9,5,1,6,1,6,1,6,1,6,1,6,1,7,1,7,1,7,1,8,1,8,1,8,
+		1,8,1,8,1,8,1,8,1,8,1,8,1,8,1,8,3,8,101,8,8,1,8,1,8,3,8,105,8,8,1,9,1,
+		9,1,9,1,9,1,9,1,9,1,10,1,10,1,10,3,10,116,8,10,1,10,3,10,119,8,10,1,10,
+		1,10,3,10,123,8,10,1,10,1,10,1,10,1,11,1,11,1,11,1,11,1,11,1,11,1,12,1,
+		12,5,12,136,8,12,10,12,12,12,139,9,12,1,12,1,12,1,13,1,13,3,13,145,8,13,
+		1,13,1,13,1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,3,14,
+		160,8,14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,
+		14,1,14,1,14,5,14,177,8,14,10,14,12,14,180,9,14,1,15,1,15,1,15,3,15,185,
+		8,15,1,15,1,15,1,16,1,16,1,16,5,16,192,8,16,10,16,12,16,195,9,16,1,16,
+		0,1,28,17,0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,0,5,1,0,7,10,1,
+		0,7,11,1,0,22,27,1,0,14,15,1,0,16,18,213,0,37,1,0,0,0,2,50,1,0,0,0,4,54,
+		1,0,0,0,6,56,1,0,0,0,8,64,1,0,0,0,10,73,1,0,0,0,12,81,1,0,0,0,14,86,1,
+		0,0,0,16,89,1,0,0,0,18,106,1,0,0,0,20,112,1,0,0,0,22,127,1,0,0,0,24,133,
+		1,0,0,0,26,142,1,0,0,0,28,159,1,0,0,0,30,181,1,0,0,0,32,188,1,0,0,0,34,
+		36,3,2,1,0,35,34,1,0,0,0,36,39,1,0,0,0,37,35,1,0,0,0,37,38,1,0,0,0,38,
+		1,1,0,0,0,39,37,1,0,0,0,40,51,3,4,2,0,41,51,3,12,6,0,42,51,3,14,7,0,43,
+		51,3,16,8,0,44,51,3,18,9,0,45,51,3,20,10,0,46,51,3,22,11,0,47,51,3,24,
+		12,0,48,51,3,30,15,0,49,51,3,26,13,0,50,40,1,0,0,0,50,41,1,0,0,0,50,42,
+		1,0,0,0,50,43,1,0,0,0,50,44,1,0,0,0,50,45,1,0,0,0,50,46,1,0,0,0,50,47,
+		1,0,0,0,50,48,1,0,0,0,50,49,1,0,0,0,51,3,1,0,0,0,52,55,3,6,3,0,53,55,3,
+		8,4,0,54,52,1,0,0,0,54,53,1,0,0,0,55,5,1,0,0,0,56,57,7,0,0,0,57,60,5,35,
+		0,0,58,59,5,19,0,0,59,61,3,28,14,0,60,58,1,0,0,0,60,61,1,0,0,0,61,62,1,
+		0,0,0,62,63,5,5,0,0,63,7,1,0,0,0,64,65,7,1,0,0,65,66,5,35,0,0,66,68,5,
+		1,0,0,67,69,3,10,5,0,68,67,1,0,0,0,68,69,1,0,0,0,69,70,1,0,0,0,70,71,5,
+		2,0,0,71,72,3,24,12,0,72,9,1,0,0,0,73,78,5,35,0,0,74,75,5,6,0,0,75,77,
+		5,35,0,0,76,74,1,0,0,0,77,80,1,0,0,0,78,76,1,0,0,0,78,79,1,0,0,0,79,11,
+		1,0,0,0,80,78,1,0,0,0,81,82,5,35,0,0,82,83,5,19,0,0,83,84,3,28,14,0,84,
+		85,5,5,0,0,85,13,1,0,0,0,86,87,3,28,14,0,87,88,5,5,0,0,88,15,1,0,0,0,89,
+		90,5,28,0,0,90,91,5,1,0,0,91,92,3,28,14,0,92,93,5,2,0,0,93,100,3,24,12,
+		0,94,95,5,29,0,0,95,96,5,1,0,0,96,97,3,28,14,0,97,98,5,2,0,0,98,99,3,24,
+		12,0,99,101,1,0,0,0,100,94,1,0,0,0,100,101,1,0,0,0,101,104,1,0,0,0,102,
+		103,5,30,0,0,103,105,3,24,12,0,104,102,1,0,0,0,104,105,1,0,0,0,105,17,
+		1,0,0,0,106,107,5,32,0,0,107,108,5,1,0,0,108,109,3,28,14,0,109,110,5,2,
+		0,0,110,111,3,24,12,0,111,19,1,0,0,0,112,113,5,31,0,0,113,115,5,1,0,0,
+		114,116,3,6,3,0,115,114,1,0,0,0,115,116,1,0,0,0,116,118,1,0,0,0,117,119,
+		3,28,14,0,118,117,1,0,0,0,118,119,1,0,0,0,119,120,1,0,0,0,120,122,5,5,
+		0,0,121,123,3,12,6,0,122,121,1,0,0,0,122,123,1,0,0,0,123,124,1,0,0,0,124,
+		125,5,2,0,0,125,126,3,24,12,0,126,21,1,0,0,0,127,128,5,33,0,0,128,129,
+		5,1,0,0,129,130,3,28,14,0,130,131,5,2,0,0,131,132,5,5,0,0,132,23,1,0,0,
+		0,133,137,5,3,0,0,134,136,3,2,1,0,135,134,1,0,0,0,136,139,1,0,0,0,137,
+		135,1,0,0,0,137,138,1,0,0,0,138,140,1,0,0,0,139,137,1,0,0,0,140,141,5,
+		4,0,0,141,25,1,0,0,0,142,144,5,34,0,0,143,145,3,28,14,0,144,143,1,0,0,
+		0,144,145,1,0,0,0,145,146,1,0,0,0,146,147,5,5,0,0,147,27,1,0,0,0,148,149,
+		6,14,-1,0,149,160,5,35,0,0,150,160,5,36,0,0,151,160,5,37,0,0,152,160,5,
+		12,0,0,153,160,5,13,0,0,154,160,3,30,15,0,155,156,5,1,0,0,156,157,3,28,
+		14,0,157,158,5,2,0,0,158,160,1,0,0,0,159,148,1,0,0,0,159,150,1,0,0,0,159,
+		151,1,0,0,0,159,152,1,0,0,0,159,153,1,0,0,0,159,154,1,0,0,0,159,155,1,
+		0,0,0,160,178,1,0,0,0,161,162,10,12,0,0,162,163,5,21,0,0,163,177,3,28,
+		14,13,164,165,10,11,0,0,165,166,5,20,0,0,166,177,3,28,14,12,167,168,10,
+		10,0,0,168,169,7,2,0,0,169,177,3,28,14,11,170,171,10,9,0,0,171,172,7,3,
+		0,0,172,177,3,28,14,10,173,174,10,8,0,0,174,175,7,4,0,0,175,177,3,28,14,
+		9,176,161,1,0,0,0,176,164,1,0,0,0,176,167,1,0,0,0,176,170,1,0,0,0,176,
+		173,1,0,0,0,177,180,1,0,0,0,178,176,1,0,0,0,178,179,1,0,0,0,179,29,1,0,
+		0,0,180,178,1,0,0,0,181,182,5,35,0,0,182,184,5,1,0,0,183,185,3,32,16,0,
+		184,183,1,0,0,0,184,185,1,0,0,0,185,186,1,0,0,0,186,187,5,2,0,0,187,31,
+		1,0,0,0,188,193,3,28,14,0,189,190,5,6,0,0,190,192,3,28,14,0,191,189,1,
+		0,0,0,192,195,1,0,0,0,193,191,1,0,0,0,193,194,1,0,0,0,194,33,1,0,0,0,195,
+		193,1,0,0,0,18,37,50,54,60,68,78,100,104,115,118,122,137,144,159,176,178,
+		184,193
 	};
 
 	public static readonly ATN _ATN =
