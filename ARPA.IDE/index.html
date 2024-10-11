@@ -68,6 +68,16 @@
                             insertText: 'eger () {\n\t\n}'
                         },
                         {
+                            label: 'iken',
+                            kind: monaco.languages.CompletionItemKind.Keyword,
+                            insertText: 'iken () {\n\t\n}'
+                        },
+                        {
+                            label: 'icin',
+                            kind: monaco.languages.CompletionItemKind.Keyword,
+                            insertText: 'icin (sayi a = 0; a < 10; a = a + 1) {\n\t\n}'
+                        },
+                        {
                             label: 'degilse',
                             kind: monaco.languages.CompletionItemKind.Keyword,
                             insertText: 'degilse {\n\t\n}'
@@ -119,9 +129,19 @@
 
             // Editörü başlat
             window.editor = monaco.editor.create(document.getElementById('container'), {
-                value: '', // Başlangıç değeri boş
+                value: 'metin a = "Merhaba, ";\nmetin r = "Dünya!";\nyazdir(a + r);',
                 language: 'arpa', // Arpa dilini burada seçiyoruz
-                automaticLayout: true
+                theme: 'vs-dark', // 'vs-light' for light theme
+                automaticLayout: true,
+                minimap: {
+                    enabled: true // Minimap özelliğini açtı
+                },
+                fontSize: 15, // Font büyüklüğünü ayarladı
+                wordWrap: 'on', // Uzun satırlar taşarak gözükmesin diye kelime kaydırma açıldı
+                scrollbar: {
+                    vertical: 'visible',
+                    horizontal: 'visible'
+                }
             });
         });
     </script>

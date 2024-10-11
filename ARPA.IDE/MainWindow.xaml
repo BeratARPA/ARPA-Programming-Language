@@ -45,7 +45,7 @@
         <Button Name="ButtonRun" Content="Çalıştır" Click="ButtonRun_Click" Grid.Row="2" Margin="5" Background="#A56F42" Foreground="White" FontWeight="Bold" Height="40" />
 
         <!-- Çıktı Penceresi -->
-        <TextBox Name="TextBoxOutput" Height="150" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" 
+        <TextBox Name="TextBoxOutput" Height="200" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" 
                  FontFamily="Consolas" FontSize="15" Grid.Row="3" Margin="5" Background="#f4f4f4" BorderBrush="#ccc" BorderThickness="1" Padding="5" />
     </Grid>
 </Window>
