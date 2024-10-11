@@ -9,7 +9,7 @@
 - **C# syntax** yapısı ile aynı
 - Değişken tanımlama, atama, if/else yapıları, döngüler ve fonksiyonlar gibi temel programlama kavramlarını destekler
 - **WPF Core 8.0** ile geliştirilen **ARPA Studio IDE'si**
-- **AvalonEdit** bileşeni ile kod yazma ve düzenleme
+- **Monaco Editor** bileşeni ile kod yazma ve düzenleme
 - Yazılan ARPA kodlarının anında çalıştırılıp sonuçların görüntülenmesi
 - ARPA dilinin derleme işlemleri **ANTLR4** kullanılarak gerçekleştirme
 
@@ -28,23 +28,23 @@ Projeyi klonladıktan sonra, **ARPA Studio'yu** çalıştırabilmek için aşağ
 **ARPA** dili, **Türkçe** komutlar ve operatörler ile yazılmaktadır. İşte basit bir örnek:
 
 ```arpa
-sayı x = 10;
-sayı y = 20;
-eğer (x < y)
+sayi x = 10;
+sayi y = 20;
+eger (x < y)
 {
-    yazdır("x, y'den küçüktür.");
+    yazdir("x, y'den küçüktür.");
 }
 değilse
 {
-    yazdır("x, y'den büyük veya eşittir.");
+    yazdir("x, y'den büyük veya eşittir.");
 }
 ```
 
 ### Desteklenen Veri Türleri
-- `sayı`: Tam sayı değerleri için
-- `ondalık`: Ondalıklı sayı değerleri için
+- `sayi`: Tam sayı değerleri için
+- `ondalik`: Ondalıklı sayı değerleri için
 - `metin`: String değerler için
-- `mantık`: Mantıksal değerler (true/false) için
+- `mantik`: Mantıksal değerler (dogru/yanlis) için
 
 ### Desteklenen Operatörler
 - Aritmetik Operatörler: `+`, `-`, `*`, `/`, `%`
@@ -52,7 +52,7 @@ değilse
 - Mantıksal Operatörler: `ve`, `veya`
 
 ## ARPA Studio
-**ARPA Studio**, **ARPA** dilinde yazılan kodların düzenlenip çalıştırılabileceği bir IDE'dir. Kod editörü olarak **AvalonEdit** bileşeni kullanılmıştır. **IDE** üzerinde yazdığınız **ARPA** kodlarını anında çalıştırabilir ve çıktı penceresinde sonuçları görebilirsiniz.
+**ARPA Studio**, **ARPA** dilinde yazılan kodların düzenlenip çalıştırılabileceği bir IDE'dir. Kod editörü olarak **Monaco Editor** bileşeni kullanılmıştır. **IDE** üzerinde yazdığınız **ARPA** kodlarını anında çalıştırabilir ve çıktı penceresinde sonuçları görebilirsiniz.
 
 ## Katkıda Bulunma
 Projeye katkıda bulunmak isterseniz, lütfen pull request gönderin veya bir issue açın. Katkılarınız bizim için değerlidir!
@@ -60,6 +60,7 @@ Projeye katkıda bulunmak isterseniz, lütfen pull request gönderin veya bir is
 ## Lisans
 Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için `LICENSE` dosyasına bakabilirsiniz.
 
+---
 
 # English
 
@@ -72,7 +73,7 @@ Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için `LICENSE` dosy
 - Same structure as **C# syntax**
 - Supports basic programming concepts such as variable declarations, assignments, if/else statements, loops, and functions
 - **ARPA Studio IDE** developed with **WPF Core 8.0**
-- Code writing and editing with the **AvalonEdit** component
+- Code writing and editing with the **Monaco Editor** component
 - Instant execution of ARPA code with immediate result display
 - Compilation of ARPA code using **ANTLR4**
 
@@ -91,23 +92,23 @@ After cloning the project, follow these steps to run **ARPA Studio**:
 **ARPA** language is written using **Turkish** commands and operators. Here is a simple example:
 
 ```arpa
-sayı x = 10;
-sayı y = 20;
-eğer (x < y)
+sayi x = 10;
+sayi y = 20;
+eger (x < y)
 {
-    yazdır("x, y'den küçüktür.");
+    yazdir("x, y'den küçüktür.");
 }
 değilse
 {
-    yazdır("x, y'den büyük veya eşittir.");
+    yazdir("x, y'den büyük veya eşittir.");
 }
 ```
 
 ### Supported Data Types
-- `number`: For integer values
-- `decimal`: For decimal values
-- `string`: For string values
-- `boolean`: For logical values (true/false)
+- `sayi`: For integer values
+- `ondalik`: For decimal values
+- `metin`: For string values
+- `mantik`: For logical values (true/false)
 
 ### Supported Operators
 - Arithmetic Operators: `+`, `-`, `*`, `/`, `%`
@@ -115,7 +116,7 @@ değilse
 - Logical Operators: `and`, `or`
 
 ## ARPA Studio
-**ARPA Studio** is an IDE where you can edit and run code written in the **ARPA** language. It uses the **AvalonEdit** component as the code editor. You can instantly execute your **ARPA** code and see the results in the output window.
+**ARPA Studio** is an IDE where you can edit and run code written in the **ARPA** language. It uses the **Monaco Editor** component as the code editor. You can instantly execute your **ARPA** code and see the results in the output window.
 
 ## Contributing
 If you would like to contribute to the project, please submit a pull request or open an issue. Your contributions are valuable to us!
