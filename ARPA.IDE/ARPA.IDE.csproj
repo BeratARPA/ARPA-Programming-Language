@@ -6,11 +6,17 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <AssemblyName>ARPA Studio</AssemblyName>
+    <ApplicationIcon>Barley.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Resources\Images\Barley.ico" />
     <None Remove="Resources\Images\Barley.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Barley.ico" />
   </ItemGroup>
 
   <ItemGroup>
