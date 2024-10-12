@@ -113,7 +113,7 @@ değilse
 ### Supported Operators
 - Arithmetic Operators: `+`, `-`, `*`, `/`, `%`
 - Comparison Operators: `==`, `!=`, `>`, `<`, `>=`, `<=`
-- Logical Operators: `and`, `or`
+- Logical Operators: `ve`, `veya`
 
 ## ARPA Studio
 **ARPA Studio** is an IDE where you can edit and run code written in the **ARPA** language. It uses the **Monaco Editor** component as the code editor. You can instantly execute your **ARPA** code and see the results in the output window.
